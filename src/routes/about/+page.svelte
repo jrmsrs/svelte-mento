@@ -1,21 +1,20 @@
 <svelte:head>
 	<title>About</title>
-	<meta name="description" content="About this app" />
+	<meta name="description" content="About app" />
 </svelte:head>
 
 <div class="text-column">
-	<h1>About this app</h1>
+	<h1>about</h1>
 
 	<p>
-		This is a <a href="https://kit.svelte.dev">SvelteKit</a> app. You can make your own by typing the
-		following into your command line and following the prompts:
+		dis just a shitty project for my first interaction with sveltekit (i came from react + nodejs), tailwind css (i came from bootstrap), mongodb (i came from mysql and sqlite)
 	</p>
 
-	<pre>npm create svelte@latest</pre>
+	<p>
+		a social media based on rateyourmusic but for <a class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" href="https://pokeapi.co/">pokedex database</a>
+	</p>
 
 	<p>
-		The page you're looking at is purely static HTML, with no client-side interactivity needed.
-		Because of that, we don't need to load any JavaScript. Try viewing the page's source, or opening
-		the devtools network panel and reloading.
+		you will be able to follow a pikomon and see who follow, rate 0 to 5 stars, make review, follow user
 	</p>
 </div>

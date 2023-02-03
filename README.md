@@ -1,3 +1,3 @@
 # svelte-mento
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/sveltejs-kit-template-default-uu9gmd)
+projeto ainda sem nome pra aprender a usar sveltekit tailwindcss e mongodb (3 tecnologias q entendo bulhufas)
