@@ -4,7 +4,7 @@
 </svelte:head>
 
 <div class="text-column">
-	<h1>about</h1>
+	<h1 class="text-3xl font-bold">about</h1>
 
 	<p>
 		dis just a shitty project for my first interaction with sveltekit (i came from react + nodejs), tailwind css (i came from bootstrap), mongodb (i came from mysql and sqlite)

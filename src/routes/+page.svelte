@@ -1,5 +1,6 @@
 <script>
 	//import welcome from '$images/svelte-welcome.webp';
+	import "../app.css";
 </script>
 
 <svelte:head>
@@ -8,7 +9,7 @@
 </svelte:head>
 
 <section>
-	<h1>
+	<h1 class="text-3xl font-bold">
 		a title
 	</h1>
 
@@ -18,6 +19,8 @@
 
 </section>
 
-<style>
-
+<style lang="postcss">
+  :global(html) {
+    background-color: theme(colors.gray.100);
+  }
 </style>
