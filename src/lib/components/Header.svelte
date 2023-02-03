@@ -1,7 +1,5 @@
 <script>
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
-	import githuby from '$lib/images/github.svg';
 	import github from '$images/github.svg';
 </script>
 
