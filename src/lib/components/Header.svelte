@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import github from '$images/github.svg';
+	import { goto } from "$app/navigation";
+	function gotoPath(url) {
+		goto("/"+url);
+	}
 
 	let showMenu = false;
 
@@ -9,29 +13,29 @@
   }
 </script>
 
-<header class="dark:bg-gray-800 ">
+<header class="dark:bg-gray-900 ">
 
 	<nav class="container px-6 py-8 mx-auto md:flex md:justify-between md:items-center">
       <div class="flex items-center justify-between">
-        <a class="text-xl font-bold text-gray-900 dark:text-gray-100 md:text-2xl hover:text-red-300" href="/">
+        <span class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 text-xl font-bold md:text-2xl" on:click={()=>gotoPath('')} on:auxclick={()=>gotoPath('')}>
 					pksoc
-				</a>
+				</span>
         <div on:click={toggleNavbar} class="flex md:hidden">
-          <button type="button" class="text-gray-100 hover:text-gray-400 focus:outline-none focus:text-gray-400">
+          <span class="text-gray-900 dark:text-gray-100 hover:text-red-300 focus:outline-none focus:text-gray-400">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
-          </button>
+          </span>
         </div>
       </div>
 
       <div class="flex-col mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0 {showMenu  ? 'flex' : 'hidden'}">
-        <a class="dark:text-gray-100 hover:text-red-300 border-t-4 {$page.url.pathname === '/' ? 'border-red-300' : "border-transparent"}" href="/">Home</a>
-        <a class="dark:text-gray-100 hover:text-red-300 border-t-4 {$page.url.pathname === '/about' ? 'border-red-300' : "border-transparent"}" href="/about">About</a>
+        <span class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname === '/' ? 'border-red-300' : "border-transparent"}" on:click={()=>gotoPath('')} on:auxclick={()=>gotoPath('')}>Home</span>
+        <span class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname === '/about' ? 'border-red-300' : "border-transparent"}" on:click={()=>gotoPath('about')} on:auxclick={()=>gotoPath('about')}>About</span>
         <div class="space-y-2">
-          <a href="/" class="py-3 px-4 text-center border text-gray-800 bg-white hover:bg-red-300 hover:text-black dark:hover:bg-red-800 hover:text-white  rounded-md block lg:inline lg:border-0">
+          <span class="py-3 px-4 text-center border text-gray-800 bg-white hover:bg-red-300 hover:text-black dark:hover:bg-red-800 hover:text-white rounded-md block lg:inline lg:border-0">
             Login
-          </a>
+          </span>
         </div>
       </div>
     </nav>
