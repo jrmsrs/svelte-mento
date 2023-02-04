@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	//import welcome from '$images/svelte-welcome.webp';
 	import "../app.css";
 </script>
@@ -8,19 +8,21 @@
 	<meta name="description" content="Da app" />
 </svelte:head>
 
-<section>
-	<h1 class="text-3xl font-bold">
-		a title
+<section class="dark:text-gray-100">
+	<h1 class="text-3xl font-bold mb-2">
+		pikomon social
 	</h1>
 
 	<h2>
-		a descript
+		a descript.
 	</h2>
 
 </section>
 
 <style lang="postcss">
   :global(html) {
-    background-color: theme(colors.gray.100);
+    /* background-color: theme(colors.gray.100); */
+		
+		user-select: none;
   }
 </style>

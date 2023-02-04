@@ -3,18 +3,18 @@
 	<meta name="description" content="About app" />
 </svelte:head>
 
-<div class="text-column">
-	<h1 class="text-3xl font-bold">about</h1>
+<div class="text-column dark:text-gray-100">
+	<h1 class="text-3xl font-bold  mb-2">about</h1>
 
 	<p>
-		dis just a shitty project for my first interaction with sveltekit (i came from react + nodejs), tailwind css (i came from bootstrap), mongodb (i came from mysql and sqlite)
+		dis just a shitty project for my first interaction with sveltekit (i came from react + nodejs), tailwind css (i came from bootstrap), mongodb (i came from mysql and sqlite).
 	</p>
 
 	<p>
-		a social media based on rateyourmusic but for <a class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" href="https://pokeapi.co/">pokedex database</a>
+		a social media based on rateyourmusic but for <a target="_blank" rel="noopener noreferrer" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" href="https://pokeapi.co/">pokedex database</a>.
 	</p>
 
 	<p>
-		you will be able to follow a pikomon and see who follow, rate 0 to 5 stars, make review, follow user
+		you will be able to follow a pikomon and see who follow, rate 0 to 5 stars, make review, follow user.
 	</p>
 </div>
