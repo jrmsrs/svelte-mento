@@ -29,7 +29,7 @@
         <a class="dark:text-gray-100 hover:text-red-300 border-t-4 {$page.url.pathname === '/' ? 'border-red-300' : "border-transparent"}" href="/">Home</a>
         <a class="dark:text-gray-100 hover:text-red-300 border-t-4 {$page.url.pathname === '/about' ? 'border-red-300' : "border-transparent"}" href="/about">About</a>
         <div class="space-y-2">
-          <a href="/login" class="py-3 px-4 text-center border text-gray-800 bg-white hover:bg-red-300 hover:text-black dark:hover:bg-red-800 hover:text-white  rounded-md block lg:inline lg:border-0">
+          <a href="/" class="py-3 px-4 text-center border text-gray-800 bg-white hover:bg-red-300 hover:text-black dark:hover:bg-red-800 hover:text-white  rounded-md block lg:inline lg:border-0">
             Login
           </a>
         </div>
