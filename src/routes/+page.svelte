@@ -4,16 +4,19 @@
 	import axios from 'axios'
 
 	export const artwork_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
-	export const fallback = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/nugget.png"
+	export const fallback = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
 	
 
 	let randPkNumbers = [0, 0, 0, 0, 0, 0]
-	let loading = true
 
 	function getRandPkNumber(): number {
 		const randNum = Math.floor(Math.random() * 151) + 1;
 		const found = randPkNumbers.find((e) => {return e == randNum});
 		return found ? getRandPkNumber() : randNum
+	}
+
+	function gotoNewTab(url: string) {
+		window.open(url,'_blank');
 	}
 
 	for (let i = 0; i < randPkNumbers.length; i++) {
@@ -40,7 +43,7 @@
 
 <svelte:head>
 	<title>home | pikomon social</title>
-	<meta name="description" content="Da app" />
+	<meta name="description" content="da app" />
 </svelte:head>
 
 <section class="text-gray-900 dark:text-gray-100">
@@ -54,7 +57,7 @@
 
 	<div class="mt-6">
 	{#if (randPkData?.[0]?.types && randPkData?.[randPkNumbers.length-1]?.types)}
-		<p>check these pikomons:</p>
+		<p>check those pikomons:</p>
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 			{#each randPkData as piko}
 				<div class="rounded overflow-hidden shadow-lg">
@@ -75,7 +78,7 @@
 					</div>
 				</div>
 			{/each}
-			<p>...or check our <a href={null} class="text-red-500 hover:text-red-300 dark:underline hover:no-underline">pikodex</a></p>
+			<p>...check our <a href="/pikodex" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('/pikodex')}>pikodex</a></p>
 		</div>
 	{:else}
 		<p>loading...</p>
@@ -130,6 +133,8 @@
 	.type-rock {
 		background-color: rgb(136, 136, 136);
 	}
-	
+	.type-ice {
+		background-color: rgb(172, 225, 250);
+	}
 	
 </style>

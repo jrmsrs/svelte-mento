@@ -18,6 +18,9 @@
 	:global(html) {
     user-select: none;
   }
+	:global(img) {
+		pointer-events: none;
+	}
 	:global(button, a) {
 		cursor: default;
 	}

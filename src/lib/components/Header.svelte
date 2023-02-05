@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	//import github from '$images/github.svg';
-	import { goto } from "$app/navigation";
-	function gotoPath(url: string) {
-		goto(url);
-	}
+	// import github from '$images/github.svg';
+	// import { goto } from "$app/navigation";
+	// function gotoPath(url: string) {
+	// 	goto(url);
+	// }
   function gotoNewTab(url: string) {
 		window.open(url,'_blank');
 	}
@@ -33,11 +33,18 @@
       </div>
 
       <div class="flex-col mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0 {showMenu  ? 'flex' : 'hidden'}">
-        <a href="/" class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname === '/' ? 'border-red-300' : "border-transparent"}" on:auxclick={()=>gotoNewTab('/')}>Home</a>
-        <a href="/about" class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname === '/about' ? 'border-red-300' : "border-transparent"}" on:auxclick={()=>gotoNewTab('/about')}>About</a>
+        <a href="/" class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname === '/' ? 'border-red-300' : "border-transparent"}" on:auxclick={()=>gotoNewTab('/')}>
+					home
+				</a>
+				<a href="/pikodex" class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname === '/pikodex' ? 'border-red-300' : "border-transparent"}" on:auxclick={()=>gotoNewTab('/pikodex')}>
+					pikodex
+				</a>
+        <a href="/about" class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname === '/about' ? 'border-red-300' : "border-transparent"}" on:auxclick={()=>gotoNewTab('/about')}>
+					about
+				</a>
         <div class="space-y-2">
           <a href={null} class="py-3 px-4 text-center border text-gray-800 bg-white hover:bg-red-300 hover:text-black dark:hover:bg-red-800 dark:hover:text-white rounded-md block lg:inline lg:border-0">
-            Login
+            login
           </a>
         </div>
       </div>
