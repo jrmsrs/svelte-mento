@@ -40,7 +40,6 @@
 				piko.id = piko.url.slice(urlPokemonPattern.length, -1)
 			});
 			pageAmount = Math.ceil(resLimit/pageLimit)
-			
 		})
 	}
 	
@@ -58,40 +57,47 @@
 		// 	})
 		// })
 	})
+
+	export const setup = {
+		pageBut: "but text-gray-800 hover:text-gray-200 dark:hover:text-gray-200 dark:text-gray-200 bg-gray-200 dark:bg-gray-800",
+		pageActive: "but text-gray-200 dark:text-gray-800 dark:hover:text-gray-200 bg-gray-800 dark:bg-gray-200",
+		ellip: "ellip sm:py-1 sm:text-base text-gray-800 dark:text-gray-200"
+	}
 </script>
 
 {#if (pikomonData)}
-	<div class="text-column text-gray-900 dark:text-gray-100">
+	<div class="text-column text-gray-800 dark:text-gray-200">
 		<h1>pikodex</h1>
 		<div class="flex m-2">
 			<div class="pagination">
 				{#if (data.page!=1)}
-					<a href="/pikodex/1" class="but" on:click={()=>fetchData()}>{"|<"}</a>
-					<a href="/pikodex/{parseInt(data.page)-1}" class="but" on:click={()=>fetchData()}>{"<"}</a>
+					<a href="/pikodex/1" class="{setup.pageBut}" on:click={()=>fetchData()}>{"|<"}</a>
+					<a href="/pikodex/{parseInt(data.page)-1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{"<"}</a>
 				{/if}
 				{#if (data.page>=3 && pageAmount>3)}
-					<a href="/" class="ellip sm:py-1 sm:text-base" on:click={()=>fetchData()}>{"···"}</a>
+					<div class="{setup.ellip}">{"···"}</div>
 				{/if}
 				{#each {length: pageAmount} as _, i}
 					{#if ((i+1)==parseInt(data.page)-1 || (i+1)==parseInt(data.page)+1) || ((i+1)==parseInt(data.page)+2 && (i+1)==3) || ((i+1)==parseInt(data.page)-2 && (parseInt(data.page))==pageAmount)}
-						<a href="/pikodex/{i+1}" class="but" on:click={()=>fetchData()}>{i+1}</a>
+						<a href="/pikodex/{i+1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{i+1}</a>
 					{/if}
 					{#if ((i+1)==parseInt(data.page))}
-						<a href="/pikodex/{i+1}" class="but selected" on:click={()=>fetchData()}>{i+1}</a>
+						<!-- active -->
+						<div class="{setup.pageActive}">{i+1}</div> 
 					{/if}
 				{/each}
 				{#if (pageAmount>3 && data.page<=pageAmount-2)}
-					<a href="/" class="ellip sm:py-1 sm:text-base" on:click={()=>fetchData()}>{"···"}</a>
+					<div class="{setup.ellip}">{"···"}</div>
 				{/if}
 				{#if (data.page!=pageAmount)}
-					<a href="/pikodex/{parseInt(data.page)+1}" class="but" on:click={()=>fetchData()}>{">"}</a>
-					<a href="/pikodex/{pageAmount}" class="but" on:click={()=>fetchData()}>{">|"}</a>
+					<a href="/pikodex/{parseInt(data.page)+1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{">"}</a>
+					<a href="/pikodex/{pageAmount}" class="{setup.pageBut}" on:click={()=>fetchData()}>{">|"}</a>
 				{/if}
 			</div>
 		</div>
 		<div class="grid grid-cols-12 gap-8">
 			{#each pikomonData as piko}
-				<div class="col-span-6 sm:col-span-3 lg:col-span-2 rounded-xl bg-gray-800 p-3 item">
+				<div class="col-span-6 sm:col-span-3 lg:col-span-2 rounded-xl bg-gray-200 dark:bg-gray-800 p-3 item">
 					<a draggable="false" href="/pikodex/pikomon/{piko?.id}">
 						<div class="w-full">
 							<img class="w-full" src="{artwork_url}/{piko?.id}.png" alt="pokemon {piko?.name} (#{piko?.id})">
@@ -106,26 +112,27 @@
 		<div class="flex m-2">
 			<div class="pagination">
 				{#if (data.page!=1)}
-					<a href="/pikodex/1" class="but" on:click={()=>fetchData()}>{"|<"}</a>
-					<a href="/pikodex/{parseInt(data.page)-1}" class="but" on:click={()=>fetchData()}>{"<"}</a>
+					<a href="/pikodex/1" class="{setup.pageBut}" on:click={()=>fetchData()}>{"|<"}</a>
+					<a href="/pikodex/{parseInt(data.page)-1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{"<"}</a>
 				{/if}
 				{#if (data.page>=3 && pageAmount>3)}
-					<a href="/" class="ellip sm:py-1 sm:text-base" on:click={()=>fetchData()}>{"···"}</a>
+					<div class="{setup.ellip}">{"···"}</div>
 				{/if}
 				{#each {length: pageAmount} as _, i}
 					{#if ((i+1)==parseInt(data.page)-1 || (i+1)==parseInt(data.page)+1) || ((i+1)==parseInt(data.page)+2 && (i+1)==3) || ((i+1)==parseInt(data.page)-2 && (parseInt(data.page))==pageAmount)}
-						<a href="/pikodex/{i+1}" class="but" on:click={()=>fetchData()}>{i+1}</a>
+						<a href="/pikodex/{i+1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{i+1}</a>
 					{/if}
 					{#if ((i+1)==parseInt(data.page))}
-						<a href="/pikodex/{i+1}" class="but selected" on:click={()=>fetchData()}>{i+1}</a>
+						<!-- active -->
+						<div class="{setup.pageActive}">{i+1}</div> 
 					{/if}
 				{/each}
 				{#if (pageAmount>3 && data.page<=pageAmount-2)}
-					<a href="/" class="ellip sm:py-1 sm:text-base" on:click={()=>fetchData()}>{"···"}</a>
+					<div class="{setup.ellip}">{"···"}</div>
 				{/if}
 				{#if (data.page!=pageAmount)}
-					<a href="/pikodex/{parseInt(data.page)+1}" class="but" on:click={()=>fetchData()}>{">"}</a>
-					<a href="/pikodex/{pageAmount}" class="but" on:click={()=>fetchData()}>{">|"}</a>
+					<a href="/pikodex/{parseInt(data.page)+1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{">"}</a>
+					<a href="/pikodex/{pageAmount}" class="{setup.pageBut}" on:click={()=>fetchData()}>{">|"}</a>
 				{/if}
 			</div>
 		</div>
@@ -160,10 +167,6 @@
 		margin: auto;
 	}
 	.pagination .but {
-		--tw-bg-opacity: 1;
-		--tw-text-opacity: 1;
-		background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-		color: rgb(243 244 246 / var(--tw-text-opacity));
 		flex: none;
 		height: 1.5rem;
 		width: 2rem;
@@ -171,20 +174,14 @@
   	margin-right: auto;
 		border-radius: 9999px;
 	}
-	.pagination .selected{
-		--tw-bg-opacity: 1;
-		background-color: rgb(243 244 246 / var(--tw-text-opacity));
-		--tw-text-opacity: 1;
-		color: rgb(31 41 55 / var(--tw-bg-opacity));
-	}
 	.pagination .but:hover {
 		transition: background-color .3s;
 		--tw-bg-opacity: 1;
 		background-color: rgb(61 71 85 / var(--tw-bg-opacity));
 	}
 	.pagination .ellip {
-		--tw-text-opacity: 1;
-		color: rgb(243 244 246 / var(--tw-text-opacity));
+		/* --tw-text-opacity: 1;
+		color: rgb(243 244 246 / var(--tw-text-opacity)); */
 		flex: none;
 		height: 1.5rem;
 		width: 2rem;
