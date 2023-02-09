@@ -91,7 +91,7 @@
 		</div>
 		<div class="grid grid-cols-12 gap-8">
 			{#each pikomonData as piko}
-				<div class="col-span-4 sm:col-span-3 lg:col-span-2 rounded-xl bg-gray-800 p-3 item">
+				<div class="col-span-6 sm:col-span-3 lg:col-span-2 rounded-xl bg-gray-800 p-3 item">
 					<a draggable="false" href="/pikodex/pikomon/{piko?.id}">
 						<div class="w-full">
 							<img class="w-full" src="{artwork_url}/{piko?.id}.png" alt="pokemon {piko?.name} (#{piko?.id})">
