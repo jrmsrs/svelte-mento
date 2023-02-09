@@ -28,7 +28,7 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<!-- <style lang="postcss">
 	:global(html) {
     user-select: none;
   }
@@ -40,8 +40,8 @@
 	}
 	:global(h1) {
 		font-weight: 700;
-		font-size: 1.875rem/* 30px */;
-  	line-height: 2.25rem/* 36px */;
+		font-size: 1.875rem;
+  	line-height: 2.25rem;
 	}
 	:global(h1, h2, h3, h4, h5, h6, p) {
 		margin-bottom: 8px;
@@ -51,7 +51,7 @@
 	}
 	:global(h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover, p:hover, li:hover) {
 		transition: opacity .3s;
-		opacity: 1
+		opacity: 1;
 	}
 	:global(.type-water) {
 		background-color: rgb(122, 191, 255);
@@ -98,4 +98,4 @@
 	:global(.type-ice) {
 		background-color: rgb(172, 225, 250);
 	}
-</style>
+</style> -->

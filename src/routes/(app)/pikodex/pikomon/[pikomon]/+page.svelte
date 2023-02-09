@@ -67,10 +67,10 @@
 				<div class="m-auto w-full flex-col ">
 					<div class="text-gray-500 dark:text-gray-400 m-auto w-full bg-gray-200 dark:bg-gray-700 grid grid-cols-3 gap-8 p-8">
 						<div class="col-span-1 m-auto">
-							<img class="h-full" style="width: 128px; " src="{animated_url}/{data.pikomon}.gif" alt="pokemon {pikomonData.name} (#{data.pikomon})">
+							<img class="h-full" style="width: 128px; image-rendering: pixelated;" src="{animated_url}/{data.pikomon}.gif" alt="pokemon {pikomonData.name} (#{data.pikomon})">
 						</div>
 						<div class="col-span-1 m-auto">
-							<img class="h-full" style="width: 128px; " src="{animated_url}/shiny/{data.pikomon}.gif" alt="pokemon {pikomonData.name} (#{data.pikomon})">
+							<img class="h-full" style="width: 128px; image-rendering: pixelated;" src="{animated_url}/shiny/{data.pikomon}.gif" alt="pokemon {pikomonData.name} (#{data.pikomon})">
 						</div>
 						<div class="col-span-1 m-auto flex h-full">
 							<img class="h-full mt-auto" style="width: 128px; max-height: 128px; " src="{dream_url}/{data.pikomon}.svg" alt="pokemon {pikomonData.name} (#{data.pikomon})">
