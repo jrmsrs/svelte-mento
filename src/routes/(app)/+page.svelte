@@ -1,5 +1,6 @@
 <script lang="ts">
 	import "../../app.css";
+	import "./styles.css";
 	import { onMount } from "svelte";
 	import axios from 'axios'
 
