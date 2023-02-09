@@ -67,6 +67,9 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover, p:hover, li:hover {
 .type-electric {
 	background-color: rgb(253, 255, 116);
 }
+.type-flying {
+	background-color: rgb(202, 175, 222);
+}
 .type-ghost {
 	background-color: rgb(145, 145, 218);
 }
