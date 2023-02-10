@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>pikodex | {pikomonData?.name? `pikomon ${pikomonData.name} (#${data.pikomon})` : "loading"}</title>
+	<title>pikodex | {pikomonData?.name? `${pikomonData.name} (#${data.pikomon})` : "loading"}</title>
 	<meta name="description" content="About app" />
 </svelte:head>
 
@@ -10,9 +10,9 @@
 	// function gotoPath(url: string) {
 	// 	goto(url);
 	// }
-	// function gotoNewTab(url: string) {
-	// 	window.open(url,'_blank');
-	// }
+	function gotoNewTab(url: string) {
+		window.open(url,'_blank');
+	}
 	export const artwork_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
 	export const dream_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world"
 	export const animated_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated"
@@ -50,12 +50,12 @@
 						<p>{pikomonData.desc}</p>
 					</div>
 					<div class="px-6 pt-4 pb-2">
-						<a draggable="false" href="/pikodex/1?type={pikomonData.types[0]}">
+						<a draggable="false" href="/pikodex/1?type={pikomonData.types[0]}" on:auxclick={()=>gotoNewTab(`/pikodex/1?type=${pikomonData.types[0]}`)}>
 							<span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 {pikomonData.types[0] ? ("type-" + pikomonData.types[0]):"hidden"}">
 								{pikomonData.types[0]}
 							</span>
 						</a>
-						<a draggable="false" href="/pikodex/1?type={pikomonData.types[1]}">
+						<a draggable="false" href="/pikodex/1?type={pikomonData.types[1]}" on:auxclick={()=>gotoNewTab(`/pikodex/1?type=${pikomonData.types[1]}`)}>
 							<span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 {pikomonData.types[1] ? ("type-" + pikomonData.types[1]):"hidden"}">
 								{pikomonData.types[1]}
 							</span>
@@ -64,16 +64,16 @@
 				</div>
 			</div>
 			<div class="col-span-6 md:col-span-3 lg:col-span-4 flex h-full rounded-xl bg-gray-300 dark:bg-gray-800 overflow-hidden">
-				<div class="m-auto w-full flex-col ">
+				<div class="h-full m-auto w-full flex-col ">
 					<div class="text-gray-500 dark:text-gray-400 m-auto w-full bg-gray-200 dark:bg-gray-700 grid grid-cols-3 gap-8 p-8">
-						<div class="col-span-1 m-auto">
-							<img class="h-full" style="width: 128px; image-rendering: pixelated;" src="{animated_url}/{data.pikomon}.gif" alt="pokemon {pikomonData.name} (#{data.pikomon})">
+						<div class="col-span-1 m-auto h-full">
+							<img class="h-full pixelated" src="{animated_url}/{data.pikomon}.gif" alt="pokemon {pikomonData.name} (#{data.pikomon})">
 						</div>
-						<div class="col-span-1 m-auto">
-							<img class="h-full" style="width: 128px; image-rendering: pixelated;" src="{animated_url}/shiny/{data.pikomon}.gif" alt="pokemon {pikomonData.name} (#{data.pikomon})">
+						<div class="col-span-1 m-auto h-full">
+							<img class="h-full pixelated" src="{animated_url}/shiny/{data.pikomon}.gif" alt="pokemon {pikomonData.name} (#{data.pikomon})">
 						</div>
 						<div class="col-span-1 m-auto flex h-full">
-							<img class="h-full mt-auto" style="width: 128px; max-height: 128px; " src="{dream_url}/{data.pikomon}.svg" alt="pokemon {pikomonData.name} (#{data.pikomon})">
+							<img class="h-full mt-auto" src="{dream_url}/{data.pikomon}.svg" alt="pokemon {pikomonData.name} (#{data.pikomon})">
 						</div>
 					</div>
 					<table class="text-sm text-left text-gray-500 dark:text-gray-400  bg-gray-200 dark:bg-gray-700">
@@ -164,6 +164,9 @@
 	:root {
 		--link-color: rgba(255, 62, 62, 0.5);
 		--blur: 1.5px;
+	}
+	.pixelated {
+		image-rendering: pixelated;
 	}
 	.item a:hover{
 		filter: drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) ;

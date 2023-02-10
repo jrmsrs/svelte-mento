@@ -4,6 +4,9 @@
 </svelte:head>
 
 <script lang="ts">
+	import Pagination from '$components/Pagination.svelte';
+	import Skeleton from '$components/Skeleton.svelte';
+
 	import { onMount } from "svelte";
 	import axios from 'axios'
 	import { page } from "$app/stores";
@@ -11,9 +14,9 @@
 	// function gotoPath(url: string) {
 	// 	goto(url);
 	// }
-	// function gotoNewTab(url: string) {
-	// 	window.open(url,'_blank');
-	// }
+	function gotoNewTab(url: string) {
+		window.open(url,'_blank');
+	}
 	export const artwork_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
 	export const dream_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world"
 	export const animated_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated"
@@ -45,17 +48,6 @@
 	
 	onMount(async()=>{
 		fetchData()
-		// const url = "https://pokeapi.co/api/v2"
-		// axios.get(`${url}/pokemon-species/${data.pikomon}`)
-		// .then((res1)=>{
-		// 	axios.get(`${url}/pokemon/${data.pikomon}`)
-		// 	.then((res2)=>{
-		// 		pikomonData = res1.data
-		// 		pikomonData.desc = res1.data.flavor_text_entries[1].flavor_text.replaceAll('\f', ' ')
-		// 		pikomonData.types = [res2.data.types[0].type.name, res2.data.types?.[1]?.type.name]
-		// 		pikomonData.stats = res2.data.stats
-		// 	})
-		// })
 	})
 
 	export const setup = {
@@ -68,37 +60,11 @@
 {#if (pikomonData)}
 	<div class="text-column text-gray-800 dark:text-gray-200">
 		<h1>pikodex</h1>
-		<div class="flex m-2">
-			<div class="pagination">
-				{#if (data.page!=1)}
-					<a draggable="false" href="/pikodex/1" class="{setup.pageBut}" on:click={()=>fetchData()}>{"|<"}</a>
-					<a draggable="false" href="/pikodex/{parseInt(data.page)-1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{"<"}</a>
-				{/if}
-				{#if (data.page>=3 && pageAmount>3)}
-					<div class="{setup.ellip}">{"···"}</div>
-				{/if}
-				{#each {length: pageAmount} as _, i}
-					{#if ((i+1)==parseInt(data.page)-1 || (i+1)==parseInt(data.page)+1) || ((i+1)==parseInt(data.page)+2 && (i+1)==3) || ((i+1)==parseInt(data.page)-2 && (parseInt(data.page))==pageAmount)}
-						<a draggable="false" href="/pikodex/{i+1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{i+1}</a>
-					{/if}
-					{#if ((i+1)==parseInt(data.page))}
-						<!-- active -->
-						<div class="{setup.pageActive}">{i+1}</div> 
-					{/if}
-				{/each}
-				{#if (pageAmount>3 && data.page<=pageAmount-2)}
-					<div class="{setup.ellip}">{"···"}</div>
-				{/if}
-				{#if (data.page!=pageAmount)}
-					<a draggable="false" href="/pikodex/{parseInt(data.page)+1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{">"}</a>
-					<a draggable="false" href="/pikodex/{pageAmount}" class="{setup.pageBut}" on:click={()=>fetchData()}>{">|"}</a>
-				{/if}
-			</div>
-		</div>
+		<Pagination {data} {setup} {pageAmount} {fetchData} />
 		<div class="grid grid-cols-12 gap-8">
 			{#each pikomonData as piko}
 				<div class="col-span-6 sm:col-span-3 lg:col-span-2 rounded-xl bg-gray-200 dark:bg-gray-800 p-3 item">
-					<a draggable="false" href="/pikodex/pikomon/{piko?.id}">
+					<a draggable="false" href="/pikodex/pikomon/{piko?.id}" on:auxclick={()=>gotoNewTab(`/pikodex/pikomon/${piko?.id}`)}>
 						<div class="w-full">
 							<img class="w-full" src="{artwork_url}/{piko?.id}.png" alt="pokemon {piko?.name} (#{piko?.id})">
 						</div>
@@ -109,33 +75,7 @@
 				</div>
 			{/each}
 		</div>
-		<div class="flex m-2">
-			<div class="pagination">
-				{#if (data.page!=1)}
-					<a href="/pikodex/1" class="{setup.pageBut}" on:click={()=>fetchData()}>{"|<"}</a>
-					<a href="/pikodex/{parseInt(data.page)-1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{"<"}</a>
-				{/if}
-				{#if (data.page>=3 && pageAmount>3)}
-					<div class="{setup.ellip}">{"···"}</div>
-				{/if}
-				{#each {length: pageAmount} as _, i}
-					{#if ((i+1)==parseInt(data.page)-1 || (i+1)==parseInt(data.page)+1) || ((i+1)==parseInt(data.page)+2 && (i+1)==3) || ((i+1)==parseInt(data.page)-2 && (parseInt(data.page))==pageAmount)}
-						<a href="/pikodex/{i+1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{i+1}</a>
-					{/if}
-					{#if ((i+1)==parseInt(data.page))}
-						<!-- active -->
-						<div class="{setup.pageActive}">{i+1}</div> 
-					{/if}
-				{/each}
-				{#if (pageAmount>3 && data.page<=pageAmount-2)}
-					<div class="{setup.ellip}">{"···"}</div>
-				{/if}
-				{#if (data.page!=pageAmount)}
-					<a href="/pikodex/{parseInt(data.page)+1}" class="{setup.pageBut}" on:click={()=>fetchData()}>{">"}</a>
-					<a href="/pikodex/{pageAmount}" class="{setup.pageBut}" on:click={()=>fetchData()}>{">|"}</a>
-				{/if}
-			</div>
-		</div>
+		<Pagination {data} {setup} {pageAmount} {fetchData} />
 		
 
 		<p>tasks:</p>
@@ -150,6 +90,11 @@
 	</div>
 {:else}
 	<p>loading...</p>
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+		{#each {length: 18} as _}
+			<Skeleton type={"photo/title"} />
+		{/each}
+	</div>
 {/if}
 
 <style lang="postcss">
@@ -159,42 +104,5 @@
 	}
 	.item a:hover{
 		filter: drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) ;
-	}
-	.pagination {
-		text-align: center;
-		width: 18rem;
-		display: flex;
-		margin: auto;
-	}
-	.pagination .but {
-		flex: none;
-		height: 1.5rem;
-		width: 2rem;
-		margin-left: auto;
-  	margin-right: auto;
-		border-radius: 9999px;
-	}
-	.pagination .but:hover {
-		transition: background-color .3s;
-		--tw-bg-opacity: 1;
-		background-color: rgb(61 71 85 / var(--tw-bg-opacity));
-	}
-	.pagination .ellip {
-		/* --tw-text-opacity: 1;
-		color: rgb(243 244 246 / var(--tw-text-opacity)); */
-		flex: none;
-		height: 1.5rem;
-		width: 2rem;
-		margin-left: auto;
-  	margin-right: auto;
-		border-radius: 9999px;
-	}
-	@media (min-width: 640px) {
-		.pagination .but {
-			width: 2.5rem;
-			height: 2rem;
-			padding-top: 0.25rem;
-    	padding-bottom: 0.25rem;
-		}
 	}
 </style>
