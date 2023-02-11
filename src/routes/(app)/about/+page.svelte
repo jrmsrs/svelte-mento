@@ -25,10 +25,10 @@
 	</p>
 
 	<p>
-		you will be able to follow a <a href="https://www.youtube.com/watch?v=rwiT5FK5zJQ" target="_blank" rel="noreferrer" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('https://www.youtube.com/watch?v=rwiT5FK5zJQ')}>pikomon</a> and see who follow, rate 0 to 5 stars, make review, follow user.
+		you will be able to follow a <a href="https://www.youtube.com/watch?v=rwiT5FK5zJQ" target="_blank" rel="noreferrer" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('https://www.youtube.com/watch?v=rwiT5FK5zJQ')}>pikomon</a> and see who follow, rate 0 to 5 stars, make review, follow user(?).
 	</p>
 
-	<p class="mt-6 text-sm font-thin">
-		<a href="https://github.com/jrmsrs" target="_blank" rel="noreferrer" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('https://github.com/jrmsrs')}>jrmsrs</a> | 2023
-	</p>
+  <p class="mt-6 text-sm font-thin">
+    <a href="https://github.com/jrmsrs" target="_blank" rel="noreferrer" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('https://github.com/jrmsrs')}>jrmsrs</a> | 2023
+  </p>
 </div>

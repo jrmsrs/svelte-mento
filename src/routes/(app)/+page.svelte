@@ -63,7 +63,7 @@
 	<div class="mt-6">
 	{#if (loaded>=6)}
 		<p>check these pikomons:</p>
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-8">
 			{#each randPkData as piko}
 				<div class="rounded overflow-hidden shadow-lg item p-2">
 					<a draggable="false" href="/pikodex/pikomon/{piko?.id}" on:auxclick={()=>gotoNewTab(`/pikodex/pikomon/${piko?.id}`)}>
@@ -93,7 +93,7 @@
 		</div>
 	{:else}
 	<p>loading</p>
-	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 pb-8">
 		{#each {length: 6} as _, i}
 			<Skeleton type={"photo/textbox"} />
 		{/each}
@@ -101,14 +101,14 @@
 	</div>
 	{/if}
 
-	<p>tasks:</p>
+	<!-- <p>tasks:</p> -->
 
-	<ul>
-		<li>[x] basic integration with pokeapi</li>
-		<li>[x] advanced integration with pokeapi</li>
-		<li>[ ] authentication / permissions</li>
-		<li>[ ] mongodb crud integration</li>
-	</ul>
+	<!-- <ul> -->
+	<!-- 	<li>[x] basic integration with pokeapi</li> -->
+	<!-- 	<li>[x] advanced integration with pokeapi</li> -->
+	<!-- 	<li>[ ] authentication / permissions</li> -->
+	<!-- 	<li>[ ] mongodb crud integration</li> -->
+	<!-- </ul> -->
 
 </div>
 

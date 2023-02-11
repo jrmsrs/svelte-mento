@@ -7,9 +7,10 @@
 	export let setup: any
 	export let pageAmount: any
 	export let fetchData: any
+  export let className: string
 </script>
 
-<div class="flex m-2">
+<div class="flex m-2 {className}">
 	<div class="pagination">
 		{#if (data.page!=1)}
 			<a href="/pikodex/1" class="{setup.pageBut}" on:auxclick={()=>gotoNewTab(`/pikodex/1`)} on:click={()=>fetchData()}>{"|<"}</a>

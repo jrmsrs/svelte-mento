@@ -9,7 +9,7 @@
 
 	import { onMount } from "svelte";
 	import axios from 'axios'
-	import { page } from "$app/stores";
+	// import { page } from "$app/stores";
 	// import { goto } from "$app/navigation";
 	// function gotoPath(url: string) {
 	// 	goto(url);
@@ -60,7 +60,7 @@
 {#if (pikomonData)}
 	<div class="text-column text-gray-800 dark:text-gray-200">
 		<h1>pikodex</h1>
-		<Pagination {data} {setup} {pageAmount} {fetchData} />
+		<Pagination {data} {setup} {pageAmount} {fetchData} className={""}/>
 		<div class="grid grid-cols-12 gap-8">
 			{#each pikomonData as piko}
 				<div class="col-span-6 sm:col-span-3 lg:col-span-2 rounded-xl bg-gray-200 dark:bg-gray-800 p-3 item">
@@ -75,18 +75,19 @@
 				</div>
 			{/each}
 		</div>
-		<Pagination {data} {setup} {pageAmount} {fetchData} />
+		<Pagination {data} {setup} {pageAmount} {fetchData} className={"pb-8"} />
 		
+    <div class="hidden">
+		  <p>tasks:</p>
 
-		<p>tasks:</p>
-
-		<ul>
-			<li>[x] iterate and list the first 151 - basic</li>
-			<li>[x] list with pagination, limit to 60 - basic/intermediate</li>
-			<li>[x] compact, 6 columns on lg or xl screen - stylization</li>
-			<li>[ ] allow search - advanced</li>
-			<li>[ ] filter by type, egg group(?), evolution(?) etc - advanced</li>
-		</ul>
+  		<ul>
+	  		<li>[x] iterate and list the first 151 - basic</li>
+		  	<li>[x] list with pagination, limit to 60 - basic/intermediate</li>
+			  <li>[x] compact, 6 columns on lg or xl screen - stylization</li>
+  			<li>[ ] allow search - advanced</li>
+	  		<li>[ ] filter by type, egg group(?), evolution(?) etc - advanced</li>
+		  </ul>
+    </div>
 	</div>
 {:else}
 	<p>loading...</p>

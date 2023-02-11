@@ -37,7 +37,7 @@
 </script>
 
 {#if (pikomonData?.types)}
-	<div class="text-column text-gray-900 dark:text-gray-100">
+	<div class="text-column text-gray-900 dark:text-gray-100 pb-8">
 		<h1>{pikomonData.name} #{data.pikomon}</h1>
 		<div class="grid grid-cols-6 gap-8">
 			<div class="col-span-6 md:col-span-3 lg:col-span-2 rounded-xl overflow-hidden bg-gray-300 dark:bg-gray-800 grid grid-cols-2 gap-8 item">
@@ -147,14 +147,16 @@
 				</div>
 			</div>
 		</div>
-		<p>tasks:</p>
+    <div class="hidden">
+	  	<p>tasks:</p>
 
-		<ul>
-			<li class="txt">[x] basic infos</li>
-			<li class="txt">[x] stats with graph - still basic</li>
-			<li class="txt">[ ] evolutions - relationships between</li>
-			<li class="txt">[ ] weakness/strenghts - relationships between + multipliers calc</li>
-		</ul>
+		  <ul>
+			  <li class="txt">[x] basic infos</li>
+  			<li class="txt">[x] stats with graph - still basic</li>
+	  		<li class="txt">[ ] evolutions - relationships between</li>
+		  	<li class="txt">[ ] weakness/strenghts - relationships between + multipliers calc</li>
+	  	</ul>
+    </div>
 	</div>
 {:else}
 	<p>loading...</p>
