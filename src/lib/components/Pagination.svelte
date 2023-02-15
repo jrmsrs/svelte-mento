@@ -13,15 +13,15 @@
 <div class="flex m-2 {className}">
 	<div class="pagination">
 		{#if (data.page!=1)}
-			<a href="/pikodex/1" class="{setup.pageBut}" on:auxclick={()=>gotoNewTab(`/pikodex/1`)} on:click={()=>fetchData()}>{"|<"}</a>
-			<a href="/pikodex/{parseInt(data.page)-1}" on:auxclick={()=>gotoNewTab(`/pikodex/${parseInt(data.page)-1}`)} class="{setup.pageBut}" on:click={()=>fetchData()}>{"<"}</a>
+			<a draggable="false" href="/pikodex/1" class="{setup.pageBut}" on:auxclick={()=>gotoNewTab(`/pikodex/1`)} on:click={()=>fetchData()}>{"|<"}</a>
+			<a draggable="false" href="/pikodex/{parseInt(data.page)-1}" on:auxclick={()=>gotoNewTab(`/pikodex/${parseInt(data.page)-1}`)} class="{setup.pageBut}" on:click={()=>fetchData()}>{"<"}</a>
 		{/if}
 		{#if (data.page>=3 && pageAmount>3)}
 			<div class="{setup.ellip}">{"···"}</div>
 		{/if}
 		{#each {length: pageAmount} as _, i}
 			{#if ((i+1)==parseInt(data.page)-1 || (i+1)==parseInt(data.page)+1) || ((i+1)==parseInt(data.page)+2 && (i+1)==3) || ((i+1)==parseInt(data.page)-2 && (parseInt(data.page))==pageAmount)}
-				<a href="/pikodex/{i+1}" on:auxclick={()=>gotoNewTab(`/pikodex/${i+1}`)} class="{setup.pageBut}" on:click={()=>fetchData()}>{i+1}</a>
+				<a draggable="false" href="/pikodex/{i+1}" on:auxclick={()=>gotoNewTab(`/pikodex/${i+1}`)} class="{setup.pageBut}" on:click={()=>fetchData()}>{i+1}</a>
 			{/if}
 			{#if ((i+1)==parseInt(data.page))}
 				<!-- active -->
@@ -32,8 +32,8 @@
 			<div class="{setup.ellip}">{"···"}</div>
 		{/if}
 		{#if (data.page!=pageAmount)}
-			<a href="/pikodex/{parseInt(data.page)+1}" on:auxclick={()=>gotoNewTab(`/pikodex/${parseInt(data.page)+1}`)} class="{setup.pageBut}" on:click={()=>fetchData()}>{">"}</a>
-			<a href="/pikodex/{pageAmount}" on:auxclick={()=>gotoNewTab(`/pikodex/${pageAmount}`)} class="{setup.pageBut}" on:click={()=>fetchData()}>{">|"}</a>
+			<a draggable="false" href="/pikodex/{parseInt(data.page)+1}" on:auxclick={()=>gotoNewTab(`/pikodex/${parseInt(data.page)+1}`)} class="{setup.pageBut}" on:click={()=>fetchData()}>{">"}</a>
+			<a draggable="false" href="/pikodex/{pageAmount}" on:auxclick={()=>gotoNewTab(`/pikodex/${pageAmount}`)} class="{setup.pageBut}" on:click={()=>fetchData()}>{">|"}</a>
 		{/if}
 	</div>
 </div>
@@ -59,8 +59,6 @@
 		background-color: rgb(61 71 85 / var(--tw-bg-opacity));
 	}
 	.pagination .ellip {
-		/* --tw-text-opacity: 1;
-		color: rgb(243 244 246 / var(--tw-text-opacity)); */
 		flex: none;
 		height: 1.5rem;
 		width: 2rem;

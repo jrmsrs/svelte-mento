@@ -89,7 +89,7 @@
 					</div>
 				</div>
 			{/each}
-			<p class="mt-4">...or check our <a href="/pikodex" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('/pikodex')}>pikodex</a></p>
+			<p class="mt-4">...or check our <a draggable="false" href="/pikodex" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('/pikodex')}>pikodex</a></p>
 		</div>
 	{:else}
 	<p>loading</p>
@@ -97,7 +97,7 @@
 		{#each {length: 6} as _, i}
 			<Skeleton type={"photo/textbox"} />
 		{/each}
-		<p class="mt-4">...or check our <a href="/pikodex" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('/pikodex')}>pikodex</a></p>
+		<p class="mt-4">...or check our <a draggable="false" href="/pikodex" class="text-red-500 hover:text-red-300 dark:underline hover:no-underline" on:auxclick={()=>gotoNewTab('/pikodex')}>pikodex</a></p>
 	</div>
 	{/if}
 

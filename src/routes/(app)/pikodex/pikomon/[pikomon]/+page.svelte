@@ -6,10 +6,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import axios from 'axios'
-	// import { goto } from "$app/navigation";
-	// function gotoPath(url: string) {
-	// 	goto(url);
-	// }
+	
 	function gotoNewTab(url: string) {
 		window.open(url,'_blank');
 	}
@@ -79,7 +76,7 @@
 					<table class="text-sm text-left text-gray-500 dark:text-gray-400  bg-gray-200 dark:bg-gray-700">
 						<thead>
 							<tr class="dark:border-gray-700">
-								<th colspan="3" class="text-center">base stats (lvl 100)</th>
+								<th colspan="3" class="text-center">base stats</th>
 							</tr>
 						</thead>
 						<tbody>
