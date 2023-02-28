@@ -1,6 +1,23 @@
+<style lang="postcss">
+  :root {
+    --link-color: rgba(255, 62, 62, 0.5);
+    --blur: 1.5px;
+  }
+  .pixelated {
+    image-rendering: pixelated;
+  }
+  .item a:hover {
+    filter: drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color));
+  }
+</style>
+
 <script lang="ts">
   import { onMount } from 'svelte'
   import axios from 'axios'
+  import { PikomonData } from '$root/classes'
 
   function gotoNewTab(url: string) {
     window.open(url, '_blank')
@@ -15,23 +32,23 @@
   export const fallback =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
   export let data: any
-  let pikomonData: any
+  let pikomonData: PikomonData
 
   onMount(async () => {
     const url = 'https://pokeapi.co/api/v2'
-    axios.get(`${url}/pokemon-species/${data.pikomon}`).then((res1) => {
-      axios.get(`${url}/pokemon/${data.pikomon}`).then((res2) => {
-        pikomonData = res1.data
-        pikomonData.desc = res1.data.flavor_text_entries[1].flavor_text.replaceAll('\f', ' ')
-        pikomonData.types = [res2.data.types[0].type.name, res2.data.types?.[1]?.type.name]
-        pikomonData.stats = res2.data.stats
+    axios.get(`${url}/pokemon-species/${data.pikomon}`).then(res1 => {
+      axios.get(`${url}/pokemon/${data.pikomon}`).then(res2 => {
+        pikomonData = new PikomonData(res2.data, res1.data)
       })
     })
   })
 </script>
 
 <svelte:head>
-  <title>pikodex | {pikomonData?.name ? `${pikomonData.name} (#${data.pikomon})` : 'loading'}</title
+  <title
+    >pikodex | {pikomonData?.name
+      ? `${pikomonData.name} (#${data.pikomon})`
+      : 'loading'}</title
   >
   <meta name="description" content="About app" />
 </svelte:head>
@@ -136,11 +153,11 @@
                   <div class="bg-gray-400 rounded-full h-2.5 dark:bg-gray-800">
                     <div
                       class="bg-red-400 dark:bg-red-300 h-2.5 rounded-full"
-                      style="width: {(pikomonData.stats[0].base_stat / 255) * 100}%"
+                      style="width: {(pikomonData.stats.hp / 255) * 100}%"
                     />
                   </div>
                 </td>
-                <td class="px-6 py-4">{pikomonData.stats[0].base_stat}</td>
+                <td class="px-6 py-4">{pikomonData.stats.hp}</td>
               </tr>
               <tr class="dark:border-gray-700">
                 <td class="px-6 py-4">Attack</td>
@@ -148,11 +165,11 @@
                   <div class="bg-gray-400 rounded-full h-2.5 dark:bg-gray-800">
                     <div
                       class="bg-red-400 dark:bg-red-300 h-2.5 rounded-full"
-                      style="width: {(pikomonData.stats[1].base_stat / 255) * 100}%"
+                      style="width: {(pikomonData.stats.atk / 255) * 100}%"
                     />
                   </div>
                 </td>
-                <td class="px-6 py-4">{pikomonData.stats[1].base_stat}</td>
+                <td class="px-6 py-4">{pikomonData.stats.atk}</td>
               </tr>
               <tr>
                 <td class="px-6 py-4">Defense</td>
@@ -160,11 +177,11 @@
                   <div class="bg-gray-400 rounded-full h-2.5 dark:bg-gray-800">
                     <div
                       class="bg-red-400 dark:bg-red-300 h-2.5 rounded-full"
-                      style="width: {(pikomonData.stats[2].base_stat / 255) * 100}%"
+                      style="width: {(pikomonData.stats.def / 255) * 100}%"
                     />
                   </div>
                 </td>
-                <td class="px-6 py-4">{pikomonData.stats[2].base_stat}</td>
+                <td class="px-6 py-4">{pikomonData.stats.def}</td>
               </tr>
               <tr>
                 <td class="px-6 py-4">Sp.Atk.</td>
@@ -172,11 +189,11 @@
                   <div class="bg-gray-400 rounded-full h-2.5 dark:bg-gray-800">
                     <div
                       class="bg-red-400 dark:bg-red-300 h-2.5 rounded-full"
-                      style="width: {(pikomonData.stats[3].base_stat / 255) * 100}%"
+                      style="width: {(pikomonData.stats.spAtk / 255) * 100}%"
                     />
                   </div>
                 </td>
-                <td class="px-6 py-4">{pikomonData.stats[3].base_stat}</td>
+                <td class="px-6 py-4">{pikomonData.stats.spAtk}</td>
               </tr>
               <tr>
                 <td class="px-6 py-4">Sp.Def.</td>
@@ -184,11 +201,11 @@
                   <div class="bg-gray-400 rounded-full h-2.5 dark:bg-gray-800">
                     <div
                       class="bg-red-400 dark:bg-red-300 h-2.5 rounded-full"
-                      style="width: {(pikomonData.stats[4].base_stat / 255) * 100}%"
+                      style="width: {(pikomonData.stats.spDef / 255) * 100}%"
                     />
                   </div>
                 </td>
-                <td class="px-6 py-4">{pikomonData.stats[4].base_stat}</td>
+                <td class="px-6 py-4">{pikomonData.stats.spDef}</td>
               </tr>
               <tr>
                 <td class="px-6 py-4">Speed</td>
@@ -196,11 +213,11 @@
                   <div class="bg-gray-400 rounded-full h-2.5 dark:bg-gray-800">
                     <div
                       class="bg-red-400 dark:bg-red-300 h-2.5 rounded-full"
-                      style="width: {(pikomonData.stats[5].base_stat / 255) * 100}%"
+                      style="width: {(pikomonData.stats.spd / 255) * 100}%"
                     />
                   </div>
                 </td>
-                <td class="px-6 py-4">{pikomonData.stats[5].base_stat}</td>
+                <td class="px-6 py-4">{pikomonData.stats.spd}</td>
               </tr>
             </tbody>
           </table>
@@ -214,25 +231,12 @@
         <li class="txt">[x] basic infos</li>
         <li class="txt">[x] stats with graph - still basic</li>
         <li class="txt">[ ] evolutions - relationships between</li>
-        <li class="txt">[ ] weakness/strenghts - relationships between + multipliers calc</li>
+        <li class="txt">
+          [ ] weakness/strenghts - relationships between + multipliers calc
+        </li>
       </ul>
     </div>
   </div>
 {:else}
   <p>loading...</p>
 {/if}
-
-<style lang="postcss">
-  :root {
-    --link-color: rgba(255, 62, 62, 0.5);
-    --blur: 1.5px;
-  }
-  .pixelated {
-    image-rendering: pixelated;
-  }
-  .item a:hover {
-    filter: drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color));
-  }
-</style>

@@ -1,5 +1,8 @@
+<style lang="postcss">
+</style>
+
 <script lang="ts">
-  import '../../app.css'
+  import '$root/app.css'
   import Header from '$components/Header.svelte'
   import darkIcon from '$images/buttons/dark.png'
   import lightIcon from '$images/buttons/light.png'
@@ -28,7 +31,9 @@
     <img src={dark ? lightIcon : darkIcon} alt="{dark ? 'light' : 'dark'} mode" />
   </button>
 
-  <div class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100  min-h-screen">
+  <div
+    class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100  min-h-screen"
+  >
     <Header />
 
     <main class="container mx-auto px-5 my-4">
@@ -36,6 +41,3 @@
     </main>
   </div>
 </div>
-
-<style lang="postcss">
-</style>

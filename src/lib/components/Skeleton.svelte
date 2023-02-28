@@ -1,3 +1,6 @@
+<style>
+</style>
+
 <script lang="ts">
   export let type: string
   let svgPlaceholderPath =
@@ -10,7 +13,9 @@
       role="status"
       class="max-w-sm p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700"
     >
-      <div class="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700">
+      <div
+        class="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"
+      >
         <svg
           class="w-24 h-24 text-gray-200 dark:text-gray-600"
           fill="currentColor"
@@ -30,7 +35,9 @@
       role="status"
       class="max-w-sm p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700"
     >
-      <div class="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700">
+      <div
+        class="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700"
+      >
         <svg
           class="w-24 h-24 text-gray-200 dark:text-gray-600"
           fill="currentColor"
@@ -54,6 +61,3 @@
     </div>
   </div>
 {/if}
-
-<style>
-</style>

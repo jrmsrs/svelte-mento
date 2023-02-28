@@ -3,7 +3,7 @@
   // function gotoPath(url: string) {
   // 	goto(url);
   // }
-  function gotoNewTab(url: string) {
+  function gotoNewTab(url: string): void {
     window.open(url, '_blank')
   }
 </script>
@@ -17,8 +17,9 @@
   <h1>about</h1>
 
   <p>
-    dis just a shitty project for my first interaction with sveltekit (i came from react + express),
-    tailwind css (i came from bootstrap), mongodb (i came from mysql and sqlite).
+    dis just a shitty project for my first interaction with sveltekit (i came from react +
+    express), tailwind css (i came from bootstrap), mongodb (i came from mysql and
+    sqlite).
   </p>
 
   <p>
@@ -39,7 +40,8 @@
       target="_blank"
       rel="noreferrer"
       class="text-red-500 hover:text-red-300 dark:underline hover:no-underline"
-      on:auxclick={() => gotoNewTab('https://www.youtube.com/watch?v=rwiT5FK5zJQ')}>pikomon</a
+      on:auxclick={() => gotoNewTab('https://www.youtube.com/watch?v=rwiT5FK5zJQ')}
+      >pikomon</a
     > and see who follow, rate 0 to 5 stars, make review, follow user(?).
   </p>
 

@@ -6,10 +6,10 @@ const CACHE = `cache-${version}`
 
 const ASSETS = [
   ...build, // the app itself
-  ...files, // everything in `static`
+  ...files // everything in `static`
 ]
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   // Create a new cache and add all files to it
   async function addFilesToCache() {
     const cache = await caches.open(CACHE)
@@ -19,7 +19,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(addFilesToCache())
 })
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   // Remove previous cached data from disk
   async function deleteOldCaches() {
     for (const key of await caches.keys()) {
@@ -30,11 +30,11 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(deleteOldCaches())
 })
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   // ignore POST requests etc
   if (event.request.method !== 'GET') return
 
-  async function respond() {
+  async function respond(): Promise<any> {
     const url = new URL(event.request.url)
     const cache = await caches.open(CACHE)
 
@@ -49,7 +49,7 @@ self.addEventListener('fetch', (event) => {
       const response = await fetch(event.request)
 
       if (response.status === 200) {
-        cache.put(event.request, response.clone())
+        await cache.put(event.request, response.clone())
       }
 
       return response
@@ -58,5 +58,5 @@ self.addEventListener('fetch', (event) => {
     }
   }
 
-  event.respondWith(respond())
+  void event.respondWith(respond())
 })

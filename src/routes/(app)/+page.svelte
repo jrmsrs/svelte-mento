@@ -1,10 +1,23 @@
+<style lang="postcss">
+  :root {
+    --link-color: rgba(255, 62, 62, 0.5);
+    --blur: 1.5px;
+  }
+  .item a:hover {
+    filter: drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color));
+  }
+</style>
+
 <script lang="ts">
   import Skeleton from '$components/Skeleton.svelte'
-
-  import '../../app.css'
+  import '$root/app.css'
   import './styles.css'
   import { onMount } from 'svelte'
   import axios from 'axios'
+  import { PikomonData } from '$root/classes'
 
   export const artwork_url =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork'
@@ -15,7 +28,7 @@
 
   function getRandPkNumber(): number {
     const randNum = Math.floor(Math.random() * 151) + 1
-    const found = randPkNumbers.find((e) => {
+    const found = randPkNumbers.find(e => {
       return e == randNum
     })
     return found ? getRandPkNumber() : randNum
@@ -25,25 +38,23 @@
     window.open(url, '_blank')
   }
 
-  for (let i = 0; i < randPkNumbers.length; i++) {
+  randPkNumbers.forEach((_, i: number) => {
     randPkNumbers[i] = getRandPkNumber()
-  }
+  })
 
-  let randPkData: Array<any> = [null, null, null, null, null, null]
+  let randPkData: PikomonData[] = new Array()
   export let loaded = 0
 
   onMount(async () => {
     const url = 'https://pokeapi.co/api/v2'
-    for (let i = 0; i < randPkNumbers.length; i++) {
-      axios.get(`${url}/pokemon-species/${randPkNumbers[i]}`).then((res1) => {
-        axios.get(`${url}/pokemon/${randPkNumbers[i]}`).then((res2) => {
-          randPkData[i] = res1.data
-          randPkData[i].types = [res2.data.types[0].type.name, res2.data.types?.[1]?.type.name]
-          randPkData[i].desc = res1.data.flavor_text_entries[1].flavor_text.replaceAll('\f', ' ')
+    randPkNumbers.forEach((_, i: number) => {
+      axios.get(`${url}/pokemon-species/${randPkNumbers[i]}`).then(res1 => {
+        axios.get(`${url}/pokemon/${randPkNumbers[i]}`).then(res2 => {
+          randPkData.push(new PikomonData(res2.data, res1.data))
           loaded++
         })
       })
-    }
+    })
   })
 </script>
 
@@ -53,17 +64,9 @@
 </svelte:head>
 
 <section class="text-gray-900 dark:text-gray-100">
-  <!-- <h1>
-		pikomon social
-	</h1>
-
-	<h2>
-		a descript. 
-	</h2> -->
-
   <div class="mt-6">
     {#if loaded >= 6}
-      <p>check these pikomons:</p>
+      <p>take a look at these pikomons:</p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-8">
         {#each randPkData as piko}
           <div class="rounded overflow-hidden shadow-lg item p-2">
@@ -154,15 +157,3 @@
     </div>
   </div>
 </section>
-
-<style lang="postcss">
-  :root {
-    --link-color: rgba(255, 62, 62, 0.5);
-    --blur: 1.5px;
-  }
-  .item a:hover {
-    filter: drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color));
-  }
-</style>

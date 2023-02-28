@@ -1,14 +1,24 @@
+<style lang="postcss">
+  :root {
+    --link-color: rgba(255, 62, 62, 0.5);
+    --blur: 1.5px;
+  }
+  .item a:hover {
+    filter: drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color));
+  }
+</style>
+
 <script lang="ts">
   import Pagination from '$components/Pagination.svelte'
   import Skeleton from '$components/Skeleton.svelte'
-
   import { onMount } from 'svelte'
   import axios from 'axios'
-  // import { page } from "$app/stores";
-  // import { goto } from "$app/navigation";
-  // function gotoPath(url: string) {
-  // 	goto(url);
-  // }
+  import { PikomonData } from '$root/classes'
+  import type { RouteParams } from './$types'
+
   function gotoNewTab(url: string) {
     window.open(url, '_blank')
   }
@@ -18,29 +28,28 @@
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world'
   export const animated_url =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated'
-
   export const fallback =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
-  export let data: any
-  let pikomonData: any
+
+  export let data: RouteParams
+  let pikomonData: Array<PikomonData | undefined>
   let pageAmount: number
 
-  async function fetchData() {
-    const resLimit = 151
-    const pageLimit = 18
+  async function fetchData(max = 151, pageLim = 18) {
+    const resLimit = max
+    const pageLimit = pageLim
     const url = 'https://pokeapi.co/api/v2'
-    const urlPokemonPattern = 'https://pokeapi.co/api/v2/pokemon/'
 
-    axios.get(`${url}/pokemon/?limit=${resLimit}`).then((res1) => {
-      pikomonData = res1.data.results
+    axios.get(`${url}/pokemon/?limit=${resLimit}`).then(res1 => {
+      pikomonData = new Array()
+      res1.data.results.forEach((res: any, i: number) => {
+        pikomonData.push(new PikomonData(res))
+      })
+      //pikomonData = res1.data.results
       // trim 60*(page number-1) first results
-      pikomonData.splice(0, pageLimit * (data.page - 1))
+      pikomonData.splice(0, pageLimit * (Number(data.page) - 1))
       // trim all results after 60
       pikomonData.splice(pageLimit, Number.MAX_VALUE)
-      pikomonData.forEach((piko: any) => {
-        // workaround to get id by url string
-        piko.id = piko.url.slice(urlPokemonPattern.length, -1)
-      })
       pageAmount = Math.ceil(resLimit / pageLimit)
     })
   }
@@ -54,7 +63,7 @@
       'but text-gray-800 hover:text-gray-200 dark:hover:text-gray-200 dark:text-gray-200 bg-gray-200 dark:bg-gray-800',
     pageActive:
       'but text-gray-200 dark:text-gray-800 dark:hover:text-gray-200 bg-gray-800 dark:bg-gray-200',
-    ellip: 'ellip sm:py-1 sm:text-base text-gray-800 dark:text-gray-200',
+    ellip: 'ellip sm:py-1 sm:text-base text-gray-800 dark:text-gray-200'
   }
 </script>
 
@@ -85,7 +94,7 @@
               />
             </div>
             <div class="text-center">
-              {piko.name}
+              {piko?.name}
             </div>
           </a>
         </div>
@@ -113,15 +122,3 @@
     {/each}
   </div>
 {/if}
-
-<style lang="postcss">
-  :root {
-    --link-color: rgba(255, 62, 62, 0.5);
-    --blur: 1.5px;
-  }
-  .item a:hover {
-    filter: drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color));
-  }
-</style>

@@ -1,3 +1,6 @@
+<style>
+</style>
+
 <script lang="ts">
   import { page } from '$app/stores'
   function gotoNewTab(url: string) {
@@ -96,6 +99,3 @@
     </div>
   </nav>
 </header>
-
-<style>
-</style>

@@ -20,7 +20,7 @@ const config = {
 
       // if true, will split your app into multiple functions
       // instead of creating a single one for the entire app
-      split: false,
+      split: false
     }),
     alias: {
       // this will match a file
@@ -31,13 +31,14 @@ const config = {
       //'my-directory': 'path/to/my-directory',
       $components: path.resolve('./src/lib/components'),
       $images: path.resolve('./src/lib/images'),
+      $root: path.resolve('./src'),
 
       // an alias ending /* will only match
       // the contents of a directory, not the directory itself
       //'my-directory/*': 'path/to/my-directory/*'
-    },
+    }
   },
-  preprocess: vitePreprocess(),
+  preprocess: vitePreprocess()
 }
 
 export default config
