@@ -1,6 +1,3 @@
-<style lang="postcss">
-</style>
-
 <script lang="ts">
   import '$root/app.css'
   import Header from '$components/Header.svelte'
@@ -13,13 +10,10 @@
 
   let subscription: any
 
-  function registerLocal(options?: { logout: boolean }) {
+  const registerLocal = (options?: { logout: boolean }) => {
     const user$ = getUser()
     subscription = user$.subscribe(value => {
-      localStorage.setItem(
-        'auth0:user',
-        options?.logout ? '{}' : JSON.stringify(value || {})
-      )
+      localStorage.setItem('auth0:user', options?.logout ? '{}' : JSON.stringify(value || {}))
     })
   }
 
@@ -27,14 +21,10 @@
     auth.initializeAuth0()
     registerLocal()
   })
-  onDestroy(() => {
-    subscription?.unsubscribe()
-  })
+  onDestroy(() => subscription?.unsubscribe())
 
   export let dark = true
-  if (browser) {
-    dark = localStorage.getItem('dark') == 'true' || false
-  }
+  if (browser) dark = localStorage.getItem('dark') == 'true' || false
 </script>
 
 <svelte:head>
@@ -53,9 +43,7 @@
     <img src={dark ? lightIcon : darkIcon} alt="{dark ? 'light' : 'dark'} mode" />
   </button>
 
-  <div
-    class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100  min-h-screen"
-  >
+  <div class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100  min-h-screen">
     <Header {registerLocal} />
 
     <main class="container mx-auto px-5 my-4">
@@ -63,3 +51,6 @@
     </main>
   </div>
 </div>
+
+<style lang="postcss">
+</style>

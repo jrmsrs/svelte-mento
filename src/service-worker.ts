@@ -11,7 +11,7 @@ const ASSETS = [
 
 self.addEventListener('install', event => {
   // Create a new cache and add all files to it
-  async function addFilesToCache() {
+  const addFilesToCache = async () => {
     const cache = await caches.open(CACHE)
     await cache.addAll(ASSETS)
   }
@@ -21,7 +21,7 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   // Remove previous cached data from disk
-  async function deleteOldCaches() {
+  const deleteOldCaches = async () => {
     for (const key of await caches.keys()) {
       if (key !== CACHE) await caches.delete(key)
     }
@@ -34,7 +34,7 @@ self.addEventListener('fetch', event => {
   // ignore POST requests etc
   if (event.request.method !== 'GET') return
 
-  async function respond(): Promise<any> {
+  const respond = async () => {
     const url = new URL(event.request.url)
     const cache = await caches.open(CACHE)
 

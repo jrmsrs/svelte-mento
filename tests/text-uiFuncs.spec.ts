@@ -2,11 +2,7 @@ import { test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-function delay(time: number) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, time)
-  })
-}
+const delay = (time: number) => new Promise(resolve => setTimeout(resolve, time))
 
 test('dark/light mode', async ({ page }) => {
   await page.goto('/')

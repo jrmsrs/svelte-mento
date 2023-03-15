@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-// function delay(time: number) {
+// delay = (time: number) => {
 //   return new Promise(function (resolve) {
 //     setTimeout(resolve, time)
 //   })

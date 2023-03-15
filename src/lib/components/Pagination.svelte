@@ -1,45 +1,5 @@
-<style>
-  .pagination {
-    text-align: center;
-    width: 18rem;
-    display: flex;
-    margin: auto;
-  }
-  .pagination .but {
-    flex: none;
-    height: 1.5rem;
-    width: 2rem;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 9999px;
-  }
-  .pagination .but:hover {
-    transition: background-color 0.3s;
-    --tw-bg-opacity: 1;
-    background-color: rgb(61 71 85 / var(--tw-bg-opacity));
-  }
-  .pagination .ellip {
-    flex: none;
-    height: 1.5rem;
-    width: 2rem;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 9999px;
-  }
-  @media (min-width: 640px) {
-    .pagination .but {
-      width: 2.5rem;
-      height: 2rem;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-    }
-  }
-</style>
-
 <script lang="ts">
-  function gotoNewTab(url: string) {
-    window.open(url, '_blank')
-  }
+  const gotoNewTab = (url: string) => window.open(url, '_blank')
 
   export let data: any
   export let setup: any
@@ -105,3 +65,41 @@
     {/if}
   </div>
 </div>
+
+<style>
+  .pagination {
+    text-align: center;
+    width: 18rem;
+    display: flex;
+    margin: auto;
+  }
+  .pagination .but {
+    flex: none;
+    height: 1.5rem;
+    width: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 9999px;
+  }
+  .pagination .but:hover {
+    transition: background-color 0.3s;
+    --tw-bg-opacity: 1;
+    background-color: rgb(61 71 85 / var(--tw-bg-opacity));
+  }
+  .pagination .ellip {
+    flex: none;
+    height: 1.5rem;
+    width: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 9999px;
+  }
+  @media (min-width: 640px) {
+    .pagination .but {
+      width: 2.5rem;
+      height: 2rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+  }
+</style>

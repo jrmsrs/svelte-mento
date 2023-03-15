@@ -8,9 +8,7 @@
   import { PikomonData } from '$root/classes'
   import type { RouteParams } from './$types'
 
-  function gotoNewTab(url: string) {
-    window.open(url, '_blank')
-  }
+  const gotoNewTab = (url: string) => window.open(url, '_blank')
   export const artwork_url =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork'
   export const dream_url =
@@ -24,7 +22,7 @@
   export let pikomonData = new Array<PikomonData>()
   let pageAmount: number
 
-  export async function fetchData(max = 151, pageLim = 18): Promise<PikomonData[]> {
+  export const fetchData = async (max = 151, pageLim = 18) => {
     const resLimit = max
     const pageLimit = pageLim
     const url = 'https://pokeapi.co/api/v2'
@@ -44,9 +42,7 @@
     return pikomonData
   }
 
-  onMount(async () => {
-    fetchData()
-  })
+  onMount(async () => fetchData())
 
   export const setup = {
     pageBut:

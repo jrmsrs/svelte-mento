@@ -6,9 +6,7 @@
   import { PikomonData } from '$root/classes'
   import type { RouteParams } from './$types'
 
-  function gotoNewTab(url: string) {
-    window.open(url, '_blank')
-  }
+  const gotoNewTab = (url: string) => window.open(url, '_blank')
   export const artwork_url =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork'
   export const dream_url =
@@ -21,7 +19,7 @@
   export let data: RouteParams = { pikomon: '1' }
   let pikomonData: PikomonData
 
-  export async function fetchData(url = 'https://pokeapi.co/api/v2'): Promise<PikomonData> {
+  export const fetchData = async (url = 'https://pokeapi.co/api/v2') => {
     return axios.get(`${url}/pokemon-species/${data.pikomon}`).then(async res1 => {
       const res2 = await axios.get(`${url}/pokemon/${data.pikomon}`)
       pikomonData = new PikomonData(res2.data, res1.data)
@@ -29,9 +27,7 @@
     })
   }
 
-  onMount(async () => {
-    fetchData()
-  })
+  onMount(async () => fetchData())
 </script>
 
 <svelte:head>

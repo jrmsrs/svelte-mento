@@ -13,9 +13,7 @@ describe('get random numbers', () => {
   })
   it('compare arr (numerically sorted) to [1, 2, 3, ..., 150, 151]', () => {
     const arrAux = new Array<number>(151)
-    for (let i = 0; i < 151; i++) {
-      arrAux[i] = i + 1
-    }
+    for (let i = 0; i < 151; i++) arrAux[i] = i + 1
 
     expect(arr.sort((a, b) => a - b)).toStrictEqual(arrAux)
   })

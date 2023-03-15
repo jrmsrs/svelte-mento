@@ -1,34 +1,24 @@
-<style>
-</style>
-
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { page } from '$app/stores'
   import { onMount } from 'svelte'
   import auth from 'sveltekit-auth0'
 
-  function gotoNewTab(url: string) {
-    window.open(url, '_blank')
-  }
+  const gotoNewTab = (url: string) => window.open(url, '_blank')
 
   let showMenu = false
 
-  function toggleNavbar() {
-    showMenu = !showMenu
-  }
+  const toggleNavbar = () => (showMenu = !showMenu)
 
   let isAuthenticated = false
   export let registerLocal: Function
 
-  function authenticate() {
+  const authenticate = () => {
     // If auth0:user = '{}', parse to empty object {}, then if empty return false even Boolean({}) being true, otherwise true
-    isAuthenticated =
-      Object.keys(JSON.parse(localStorage.getItem('auth0:user') || '{}')).length > 0
+    isAuthenticated = Object.keys(JSON.parse(localStorage.getItem('auth0:user') || '{}')).length > 0
   }
 
-  onMount(() => {
-    authenticate()
-  })
+  onMount(() => authenticate())
 </script>
 
 <header class="dark:bg-gray-900 ">
@@ -133,3 +123,6 @@
     </div>
   </nav>
 </header>
+
+<style>
+</style>

@@ -16,19 +16,13 @@
 
   export const getRandPkNumber: (arr: Array<number>) => number = arr => {
     const randNum = Math.floor(Math.random() * 151) + 1
-    const found = arr.find(e => {
-      return e == randNum
-    })
+    const found = arr.find(e => e == randNum)
     return found ? getRandPkNumber(arr) : randNum
   }
 
-  function gotoNewTab(url: string) {
-    window.open(url, '_blank')
-  }
+  const gotoNewTab = (url: string) => window.open(url, '_blank')
 
-  randPkNumbers.forEach((_, i: number) => {
-    randPkNumbers[i] = getRandPkNumber(randPkNumbers)
-  })
+  randPkNumbers.forEach((_, i: number) => (randPkNumbers[i] = getRandPkNumber(randPkNumbers)))
 
   let randPkData: PikomonData[] = new Array()
   export let loaded = 0
