@@ -47,8 +47,7 @@ export class PikomonData {
   constructor(pkm?: pikomon, specie?: specie) {
     this.id = specie?.id
     this.name = String(specie?.name || pkm?.name)
-    this.desc =
-      specie?.flavor_text_entries?.[1]?.flavor_text?.replaceAll('\f', ' ') || 'oki'
+    this.desc = specie?.flavor_text_entries?.[1]?.flavor_text?.replaceAll('\f', ' ') || ''
     this.types = [pkm?.types?.[0].type.name, pkm?.types?.[1]?.type.name]
     this.stats = {
       hp: pkm?.stats?.[0].base_stat || 0,

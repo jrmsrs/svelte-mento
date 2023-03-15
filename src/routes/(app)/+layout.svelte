@@ -8,6 +8,28 @@
   import lightIcon from '$images/buttons/light.png'
   import './styles.css'
   import { browser } from '$app/environment'
+  import auth, { getUser } from 'sveltekit-auth0'
+  import { onMount, onDestroy } from 'svelte'
+
+  let subscription: any
+
+  function registerLocal(options?: { logout: boolean }) {
+    const user$ = getUser()
+    subscription = user$.subscribe(value => {
+      localStorage.setItem(
+        'auth0:user',
+        options?.logout ? '{}' : JSON.stringify(value || {})
+      )
+    })
+  }
+
+  onMount(() => {
+    auth.initializeAuth0()
+    registerLocal()
+  })
+  onDestroy(() => {
+    subscription?.unsubscribe()
+  })
 
   export let dark = true
   if (browser) {
@@ -34,7 +56,7 @@
   <div
     class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100  min-h-screen"
   >
-    <Header />
+    <Header {registerLocal} />
 
     <main class="container mx-auto px-5 my-4">
       <slot />

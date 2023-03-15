@@ -1,15 +1,4 @@
-<style lang="postcss">
-  :root {
-    --link-color: rgba(255, 62, 62, 0.5);
-    --blur: 1.5px;
-  }
-  .item a:hover {
-    filter: drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color));
-  }
-</style>
+<svelte:options accessors />
 
 <script lang="ts">
   import Pagination from '$components/Pagination.svelte'
@@ -31,16 +20,16 @@
   export const fallback =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
 
-  export let data: RouteParams
-  let pikomonData: Array<PikomonData | undefined>
+  export let data: RouteParams = { page: '1' }
+  export let pikomonData = new Array<PikomonData>()
   let pageAmount: number
 
-  async function fetchData(max = 151, pageLim = 18) {
+  export async function fetchData(max = 151, pageLim = 18): Promise<PikomonData[]> {
     const resLimit = max
     const pageLimit = pageLim
     const url = 'https://pokeapi.co/api/v2'
 
-    axios.get(`${url}/pokemon/?limit=${resLimit}`).then(res1 => {
+    await axios.get(`${url}/pokemon/?limit=${resLimit}`).then(res1 => {
       pikomonData = new Array()
       res1.data.results.forEach((res: any, i: number) => {
         pikomonData.push(new PikomonData(res))
@@ -52,6 +41,7 @@
       pikomonData.splice(pageLimit, Number.MAX_VALUE)
       pageAmount = Math.ceil(resLimit / pageLimit)
     })
+    return pikomonData
   }
 
   onMount(async () => {
@@ -122,3 +112,15 @@
     {/each}
   </div>
 {/if}
+
+<style lang="postcss">
+  :root {
+    --link-color: rgba(255, 62, 62, 0.5);
+    --blur: 1.5px;
+  }
+  .item a:hover {
+    filter: drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color));
+  }
+</style>

@@ -2,7 +2,11 @@
 </style>
 
 <script lang="ts">
+  import { goto } from '$app/navigation'
   import { page } from '$app/stores'
+  import { onMount } from 'svelte'
+  import auth from 'sveltekit-auth0'
+
   function gotoNewTab(url: string) {
     window.open(url, '_blank')
   }
@@ -12,6 +16,19 @@
   function toggleNavbar() {
     showMenu = !showMenu
   }
+
+  let isAuthenticated = false
+  export let registerLocal: Function
+
+  function authenticate() {
+    // If auth0:user = '{}', parse to empty object {}, then if empty return false even Boolean({}) being true, otherwise true
+    isAuthenticated =
+      Object.keys(JSON.parse(localStorage.getItem('auth0:user') || '{}')).length > 0
+  }
+
+  onMount(() => {
+    authenticate()
+  })
 </script>
 
 <header class="dark:bg-gray-900 ">
@@ -88,13 +105,30 @@
         about
       </a>
       <div class="space-y-2">
-        <a
-          draggable="false"
-          href="/"
-          class="py-3 px-4 text-center border text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-red-300 hover:text-gray-800 dark:hover:text-black dark:hover:bg-red-300  rounded-md block lg:inline lg:border-0"
-        >
-          login
-        </a>
+        {#if !isAuthenticated}
+          <button
+            draggable="false"
+            on:click={async () => {
+              await auth.loginWithPopup({})
+              authenticate()
+              registerLocal({ login: true })
+            }}
+            class="py-3 px-4 text-center border text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-red-300 hover:text-gray-800 dark:hover:text-black dark:hover:bg-red-300  rounded-md block lg:inline lg:border-0"
+          >
+            login
+          </button>
+        {:else}
+          <button
+            draggable="false"
+            on:click={async () => {
+              registerLocal({ logout: true })
+              await auth.logout()
+            }}
+            class="py-3 px-4 text-center border text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-red-300 hover:text-gray-800 dark:hover:text-black dark:hover:bg-red-300  rounded-md block lg:inline lg:border-0"
+          >
+            logout
+          </button>
+        {/if}
       </div>
     </div>
   </nav>

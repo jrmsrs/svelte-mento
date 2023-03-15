@@ -1,23 +1,10 @@
-<style lang="postcss">
-  :root {
-    --link-color: rgba(255, 62, 62, 0.5);
-    --blur: 1.5px;
-  }
-  .pixelated {
-    image-rendering: pixelated;
-  }
-  .item a:hover {
-    filter: drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color));
-  }
-</style>
+<svelte:options accessors />
 
 <script lang="ts">
   import { onMount } from 'svelte'
   import axios from 'axios'
   import { PikomonData } from '$root/classes'
+  import type { RouteParams } from './$types'
 
   function gotoNewTab(url: string) {
     window.open(url, '_blank')
@@ -31,25 +18,26 @@
 
   export const fallback =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
-  export let data: any
+  export let data: RouteParams = { pikomon: '1' }
   let pikomonData: PikomonData
 
-  onMount(async () => {
-    const url = 'https://pokeapi.co/api/v2'
-    axios.get(`${url}/pokemon-species/${data.pikomon}`).then(res1 => {
-      axios.get(`${url}/pokemon/${data.pikomon}`).then(res2 => {
-        pikomonData = new PikomonData(res2.data, res1.data)
-      })
+  export async function fetchData(url = 'https://pokeapi.co/api/v2'): Promise<PikomonData> {
+    return axios.get(`${url}/pokemon-species/${data.pikomon}`).then(async res1 => {
+      const res2 = await axios.get(`${url}/pokemon/${data.pikomon}`)
+      pikomonData = new PikomonData(res2.data, res1.data)
+      return pikomonData
     })
+  }
+
+  onMount(async () => {
+    fetchData()
   })
 </script>
 
 <svelte:head>
-  <title
-    >pikodex | {pikomonData?.name
-      ? `${pikomonData.name} (#${data.pikomon})`
-      : 'loading'}</title
-  >
+  <title>
+    pikodex | {pikomonData?.name ? `${pikomonData.name} (#${data.pikomon})` : 'loading'}
+  </title>
   <meta name="description" content="About app" />
 </svelte:head>
 
@@ -69,11 +57,12 @@
         </div>
         <div class="col-span-2 bg-gray-200 dark:bg-gray-700">
           <div class="px-6 py-4">
-            <p>{pikomonData.name}</p>
-            <p>{pikomonData.desc}</p>
+            <p class="name">{pikomonData.name}</p>
+            <p class="desc">{pikomonData.desc}</p>
           </div>
           <div class="px-6 pt-4 pb-2">
             <a
+              class="type-primary"
               draggable="false"
               href="/pikodex/1?type={pikomonData.types[0]}"
               on:auxclick={() => gotoNewTab(`/pikodex/1?type=${pikomonData.types[0]}`)}
@@ -88,6 +77,7 @@
               </span>
             </a>
             <a
+              class="type-secondary"
               draggable="false"
               href="/pikodex/1?type={pikomonData.types[1]}"
               on:auxclick={() => gotoNewTab(`/pikodex/1?type=${pikomonData.types[1]}`)}
@@ -231,12 +221,25 @@
         <li class="txt">[x] basic infos</li>
         <li class="txt">[x] stats with graph - still basic</li>
         <li class="txt">[ ] evolutions - relationships between</li>
-        <li class="txt">
-          [ ] weakness/strenghts - relationships between + multipliers calc
-        </li>
+        <li class="txt">[ ] weakness/strenghts - relationships between + multipliers calc</li>
       </ul>
     </div>
   </div>
 {:else}
   <p>loading...</p>
 {/if}
+
+<style lang="postcss">
+  :root {
+    --link-color: rgba(255, 62, 62, 0.5);
+    --blur: 1.5px;
+  }
+  .pixelated {
+    image-rendering: pixelated;
+  }
+  .item a:hover {
+    filter: drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color));
+  }
+</style>

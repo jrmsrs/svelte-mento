@@ -1,23 +1,11 @@
-<style lang="postcss">
-  :root {
-    --link-color: rgba(255, 62, 62, 0.5);
-    --blur: 1.5px;
-  }
-  .item a:hover {
-    filter: drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color));
-  }
-</style>
-
 <script lang="ts">
   import Skeleton from '$components/Skeleton.svelte'
   import '$root/app.css'
   import './styles.css'
-  import { onMount } from 'svelte'
+  import { onMount, onDestroy } from 'svelte'
   import axios from 'axios'
   import { PikomonData } from '$root/classes'
+  import auth, { getUser } from 'sveltekit-auth0'
 
   export const artwork_url =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork'
@@ -26,12 +14,12 @@
 
   let randPkNumbers = [0, 0, 0, 0, 0, 0]
 
-  function getRandPkNumber(): number {
+  export const getRandPkNumber: (arr: Array<number>) => number = arr => {
     const randNum = Math.floor(Math.random() * 151) + 1
-    const found = randPkNumbers.find(e => {
+    const found = arr.find(e => {
       return e == randNum
     })
-    return found ? getRandPkNumber() : randNum
+    return found ? getRandPkNumber(arr) : randNum
   }
 
   function gotoNewTab(url: string) {
@@ -39,11 +27,13 @@
   }
 
   randPkNumbers.forEach((_, i: number) => {
-    randPkNumbers[i] = getRandPkNumber()
+    randPkNumbers[i] = getRandPkNumber(randPkNumbers)
   })
 
   let randPkData: PikomonData[] = new Array()
   export let loaded = 0
+
+  export let user: any = {}
 
   onMount(async () => {
     const url = 'https://pokeapi.co/api/v2'
@@ -55,6 +45,7 @@
         })
       })
     })
+    user = JSON.parse(localStorage.getItem('auth0:user') || '{}')
   })
 </script>
 
@@ -66,7 +57,18 @@
 <section class="text-gray-900 dark:text-gray-100">
   <div class="mt-6">
     {#if loaded >= 6}
-      <p>take a look at these pikomons:</p>
+      <p>welcome {user?.name ?? 'guest'} take a look at these pikomons</p>
+      {#if !user?.name}
+        <a
+          href={null}
+          on:click={async () => {
+            await auth.loginWithPopup({})
+          }}
+          class="text-red-500 hover:text-red-300 dark:underline hover:no-underline text-xs"
+        >
+          login if you want to rate, favorite or review
+        </a>
+      {/if}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-8">
         {#each randPkData as piko}
           <div class="rounded overflow-hidden shadow-lg item p-2">
@@ -157,3 +159,15 @@
     </div>
   </div>
 </section>
+
+<style lang="postcss">
+  :root {
+    --link-color: rgba(255, 62, 62, 0.5);
+    --blur: 1.5px;
+  }
+  .item a:hover {
+    filter: drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color))
+      drop-shadow(0 0 var(--blur) var(--link-color));
+  }
+</style>
