@@ -1,67 +1,47 @@
 <script lang="ts">
-  const gotoNewTab = (url: string) => window.open(url, '_blank')
+  import Button from './PaginationButton.svelte'
 
   export let data: any
   export let setup: any
   export let pageAmount: any
-  export let fetchData: any
+  export let fetchData: Function
   export let className: string
 </script>
 
 <div class="flex m-2 {className}">
   <div class="pagination">
     {#if data.page != 1}
-      <a
-        draggable="false"
-        href="/pikodex/1"
-        class={setup.pageBut}
-        on:auxclick={() => gotoNewTab(`/pikodex/1`)}
-        on:click={() => fetchData()}>{'|<'}</a
-      >
-      <a
-        draggable="false"
-        href="/pikodex/{Number(data.page) - 1}"
-        on:auxclick={() => gotoNewTab(`/pikodex/${Number(data.page) - 1}`)}
-        class={setup.pageBut}
-        on:click={() => fetchData()}>{'<'}</a
-      >
+      <Button {setup} {fetchData} href="/library/1">
+        {'|<'}
+      </Button>
+      <Button {setup} {fetchData} href={`/library/${Number(data.page) - 1}`}>
+        {'<'}
+      </Button>
     {/if}
     {#if data.page >= 3 && pageAmount > 3}
       <div class={setup.ellip}>{'···'}</div>
     {/if}
     {#each { length: pageAmount } as _, i}
       {#if i + 1 == Number(data.page) - 1 || i + 1 == Number(data.page) + 1 || (i + 1 == Number(data.page) + 2 && i + 1 == 3) || (i + 1 == Number(data.page) - 2 && Number(data.page) == pageAmount)}
-        <a
-          draggable="false"
-          href="/pikodex/{i + 1}"
-          on:auxclick={() => gotoNewTab(`/pikodex/${i + 1}`)}
-          class={setup.pageBut}
-          on:click={() => fetchData()}>{i + 1}</a
-        >
+        <Button {setup} {fetchData} href={`/library/${i + 1}`}>
+          {i + 1}
+        </Button>
       {/if}
       {#if i + 1 == Number(data.page)}
         <!-- active -->
-        <div class={setup.pageActive}>{i + 1}</div>
+        <Button active {setup}>{i + 1}</Button>
       {/if}
     {/each}
     {#if pageAmount > 3 && data.page <= pageAmount - 2}
       <div class={setup.ellip}>{'···'}</div>
     {/if}
     {#if data.page != pageAmount}
-      <a
-        draggable="false"
-        href="/pikodex/{Number(data.page) + 1}"
-        on:auxclick={() => gotoNewTab(`/pikodex/${Number(data.page) + 1}`)}
-        class={setup.pageBut}
-        on:click={() => fetchData()}>{'>'}</a
-      >
-      <a
-        draggable="false"
-        href="/pikodex/{pageAmount}"
-        on:auxclick={() => gotoNewTab(`/pikodex/${pageAmount}`)}
-        class={setup.pageBut}
-        on:click={() => fetchData()}>{'>|'}</a
-      >
+      <Button {setup} {fetchData} href={`/library/${Number(data.page) + 1}`}>
+        {'>'}
+      </Button>
+      <Button {setup} {fetchData} href={`/library/${pageAmount}`}>
+        {'>|'}
+      </Button>
     {/if}
   </div>
 </div>

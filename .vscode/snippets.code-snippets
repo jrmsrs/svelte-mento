@@ -1,24 +1,33 @@
 {
-  // Place your svelte-mento workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
-  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
-  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
-  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
-  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
-  // Placeholders with the same ids are connected.
-  // Example:
   "Template to vitest sveltekit components functions": {
-    "scope": "javascript,typescript",
+    "scope": "typescript",
     "prefix": ["vitest", "unit"],
     "body": [
       "import { describe, it, expect } from 'vitest'",
       "import Page from './+page.svelte'",
       "const page = new Page({ target: document.createElement('div') })",
-      "\ndescribe('$1', () => {",
-      "\tit('$2', () => {",
+      "\ndescribe('${1:describe}', () => {",
+      "\tit('${2:it}', () => {",
       "\t\texpect(page.func(0)).toBe(0)",
       "\t})",
       "})\n"
     ],
-    "description": "Log output to console"
+    "description": "Template to start Vitest *.{spec,test}.ts files",
+    "isFileTemplate": true
+  },
+  "Template for delay functions": {
+    "scope": "typescript",
+    "prefix": ["delay"],
+    "body": [
+      "const delay = (time: number) => new Promise(resolve => setTimeout(resolve, time))",
+      "$1"
+    ],
+    "description": "Create default function to delay awaits"
+  },
+  "Template for gotoNewTab functions for this sveltekit project": {
+    "scope": "typescript",
+    "prefix": ["gotoNewTab"],
+    "body": ["const gotoNewTab = (url: string) => window.open(url, '_blank')", "$1"],
+    "description": "Create default function to gotoNewTab functions, like goto(), but ...opens new tab..."
   }
 }

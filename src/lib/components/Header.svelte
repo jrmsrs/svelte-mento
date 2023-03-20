@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { goto } from '$app/navigation'
   import { page } from '$app/stores'
+  import { PUBLIC_APP_NAME } from '$env/static/public'
   import { onMount } from 'svelte'
   import auth from 'sveltekit-auth0'
-
-  const gotoNewTab = (url: string) => window.open(url, '_blank')
+  import Link from './Link.svelte'
 
   let showMenu = false
 
@@ -24,14 +23,13 @@
 <header class="dark:bg-gray-900 ">
   <nav class="container px-6 py-8 mx-auto md:flex md:justify-between md:items-center">
     <div class="flex items-center justify-between">
-      <a
-        draggable="false"
+      <Link
         href="/"
+        nodefault
         class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 text-xl font-bold md:text-2xl"
-        on:auxclick={() => gotoNewTab('/')}
       >
-        pksoc
-      </a>
+        {PUBLIC_APP_NAME}
+      </Link>
       <button on:click={toggleNavbar} class="flex md:hidden">
         <span
           class="text-gray-900 dark:text-gray-100 hover:text-red-300 dark:hover:text-red-300 focus:outline-none focus:text-gray-400"
@@ -59,41 +57,38 @@
         ? 'flex'
         : 'hidden'}"
     >
-      <a
-        draggable="false"
+      <Link
         href="/"
+        nodefault
         class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page
           .url.pathname === '/'
           ? 'border-red-300'
           : 'border-transparent'}"
-        on:auxclick={() => gotoNewTab('/')}
       >
         home
-      </a>
-      <a
-        draggable="false"
-        href="/pikodex"
+      </Link>
+      <Link
+        href="/library"
+        nodefault
         class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname.slice(
           0,
-          '/pikodex'.length
-        ) === '/pikodex'
+          '/library'.length
+        ) === '/library'
           ? 'border-red-300'
           : 'border-transparent'}"
-        on:auxclick={() => gotoNewTab('/pikodex')}
       >
-        pikodex
-      </a>
-      <a
-        draggable="false"
+        library
+      </Link>
+      <Link
         href="/about"
+        nodefault
         class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page
           .url.pathname === '/about'
           ? 'border-red-300'
           : 'border-transparent'}"
-        on:auxclick={() => gotoNewTab('/about')}
       >
         about
-      </a>
+      </Link>
       <div class="space-y-2">
         {#if !isAuthenticated}
           <button

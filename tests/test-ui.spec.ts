@@ -1,15 +1,10 @@
 import { test, expect } from '@playwright/test'
 
-// delay = (time: number) => {
-//   return new Promise(function (resolve) {
-//     setTimeout(resolve, time)
-//   })
-// }
-
 test('index page', async ({ page }) => {
   await page.goto('/')
   await page.getByText('loading...').first().isVisible()
-  await page.getByText('welcome guest take a look at these pikomons').click()
+  await page.getByText('welcome guest what do you think about listening to these albums?').click()
+  expect(await page.locator('div.album').count()).toBe(6)
   await (await page.waitForSelector('.item')).click()
 })
 
@@ -23,42 +18,30 @@ test('about page', async ({ page }) => {
     .isVisible()
   await page
     .getByText(
-      'a social media based on rateyourmusic but for pokedex database (or maybe i change everything even project name).'
-    )
-    .isVisible()
-  await page
-    .getByText(
-      'you will be able to follow a pikomon and see who follow, rate 0 to 5 stars, make review, follow user(?).'
+      'a mini social media based on rateyourmusic using last.fm api. you will be able to favorite an album and see who follow, rate 0 to 5 stars, make review, follow user(?).'
     )
     .isVisible()
   await page.getByText('jrmsrs | 2023').isVisible()
 })
 
-test('pikodex page', async ({ page }) => {
-  await page.goto('/pikodex')
-  await page.getByRole('link', { name: 'pikodex' }).first().click()
+test('library page', async ({ page }) => {
+  await page.goto('/library')
+  await page.getByRole('link').first().click()
 
-  await page.goto('/pikodex/9')
-  await page.getByRole('link', { name: 'pokemon dratini (#147) dratini' }).click()
+  await page.goto('/library/20')
+  await page.getByRole('link').last().click()
 })
 
-test('pikomon page', async ({ page }) => {
-  await page.goto('/pikodex/pikomon/1')
-  await page.getByRole('heading', { name: 'bulbasaur #1' }).isVisible()
-  expect(await (await page.waitForSelector('.name')).innerText()).toContain('bulbasaur')
-  expect(await (await page.waitForSelector('.desc')).innerText()).toContain(
-    'A strange seed was planted on its back at birth. The plant sprouts and grows with this POKéMON.'.toLowerCase()
-  )
-  expect(await (await page.waitForSelector('.type-primary')).innerText()).toContain('grass')
-  expect(await (await page.waitForSelector('.type-secondary')).innerText()).toContain('poison')
-  await page.getByRole('row', { name: 'Speed 45' }).isVisible()
+test('release page', async ({ page }) => {
+  await page.goto('/library/release/Van%20Halen;1984%20(Remastered)')
+  await page.getByRole('img', { name: '1984 (remastered)' }).isVisible()
+  expect(await (await page.waitForSelector('.artist')).innerText()).toContain('van halen')
+  await page.getByText('hard rock').isVisible()
+  await page.getByRole('table').isVisible()
 
-  await page.goto('/pikodex/pikomon/151')
-  await page.getByRole('heading', { name: 'mew #151' }).isVisible()
-  expect(await (await page.waitForSelector('.name')).innerText()).toContain('mew')
-  expect(await (await page.waitForSelector('.desc')).innerText()).toContain(
-    'So rare that it is still said to be a mirage by many experts. Only a few people have seen it worldwide.'.toLowerCase()
-  )
-  expect(await (await page.waitForSelector('.type-primary')).innerText()).toContain('psychic')
-  await page.getByRole('row', { name: 'Speed 100' }).isVisible()
+  await page.goto('/library/release/Beck;Sea%20Change')
+  await page.getByRole('img', { name: 'sea change' }).isVisible()
+  expect(await (await page.waitForSelector('.artist')).innerText()).toContain('beck')
+  await page.getByText('singer-songwriter').isVisible()
+  await page.getByRole('table').isVisible()
 })

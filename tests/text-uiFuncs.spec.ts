@@ -30,10 +30,14 @@ test('login/logout', async ({ page }) => {
   await page.goto('/')
   await delay(1000)
   await page
-    .getByText(`welcome ${process.env.TESTING_EMAIL} take a look at these pikomons`)
+    .getByText(
+      `welcome ${process.env.TESTING_EMAIL} what do you think about listening to these albums?`
+    )
     .isVisible()
 
   await page.getByRole('button', { name: 'logout' }).click()
   await page.goto('/')
-  await page.getByText('welcome guest take a look at these pikomons').isVisible()
+  await page
+    .getByText('welcome guest what do you think about listening to these albums?')
+    .isVisible()
 })

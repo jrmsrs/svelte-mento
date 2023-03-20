@@ -5,11 +5,5 @@
   "pluginSearchDirs": ["."],
   "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
   "semi": false,
-  "trailingComma": "none",
-
-  "//plugins": ["prettier-plugin-svelte"],
-  "//svelteSortOrder": "options-styles-scripts-markup",
-  "//svelteStrictMode": false,
-  "//svelteBracketNewLine": true,
-  "//svelteIndentScriptAndStyle": true
+  "trailingComma": "none"
 }

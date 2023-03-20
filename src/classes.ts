@@ -1,71 +1,159 @@
 /**
- * handles with PokéAPI /pokemon-species endpoint
+ * handles with Last.FM API /?method=user.topartists endpoint
  */
-interface specie {
-  id: number
+export interface ArtistData {
+  mbid: string
   name: string
-  flavor_text_entries?: {
-    flavor_text: string
-  }[] // means flavor_text_entries is a array of flavor_text
-}
-
-/**
- * handles with PokéAPI /pokemon endpoint
- */
-interface pikomon {
-  url?: string
-  name: string
-  types?: {
-    type: {
-      name: string
-    }
-  }[] // means types is a array of type, which has property name: string, etc
-  stats: {
-    base_stat: number
+  image: {
+    size: string
+    '#text': string
   }[]
 }
 
 /**
- * usable object class definition, convert Api response to interface
- * that get only useful attributes then format to be more legible and
- * accessible
+ * handles with Last.FM API /?method=album.getinfo endpoint
  */
-export class PikomonData {
-  public id?: number
+interface AlbumData {
+  mbid: string
+  image: {
+    size: string
+    '#text': string
+  }[]
+  name: string
+  artist: string
+  tracks: {
+    track: {
+      name: string
+      duration: number
+      '@attr': { rank: number }
+    }[]
+  }
+  tags: {
+    tag: { name: string }[]
+  }
+}
+
+/**
+ * handles with Last.FM API /?method=user.topalbums endpoint
+ */
+interface AlbumDataFromList {
+  mbid: string
+  image: {
+    size: string
+    '#text': string
+  }[]
+  name: string
+  artist: { name: string }
+}
+
+/**
+ * usable object class definition for Last.FM API artist endpoints, convert response
+ * to interface that get only useful attributes then format to be more legible
+ * and accessible
+ */
+export class Artist {
+  public id: string
   public name: string
-  public desc?: string
-  public types: Array<string | undefined>
-  public stats: {
-    hp: number
-    atk: number
-    def: number
-    spAtk: number
-    spDef: number
-    spd: number
+
+  constructor(artist: ArtistData) {
+    this.id = artist?.mbid
+    this.name = artist?.name
   }
 
-  constructor(pkm?: pikomon, specie?: specie) {
-    this.id = specie?.id
-    this.name = String(specie?.name || pkm?.name)
-    this.desc = specie?.flavor_text_entries?.[1]?.flavor_text?.replaceAll('\f', ' ') || ''
-    this.types = [pkm?.types?.[0].type.name, pkm?.types?.[1]?.type.name]
-    this.stats = {
-      hp: pkm?.stats?.[0].base_stat || 0,
-      atk: pkm?.stats?.[1].base_stat || 0,
-      def: pkm?.stats?.[2].base_stat || 0,
-      spAtk: pkm?.stats?.[3].base_stat || 0,
-      spDef: pkm?.stats?.[4].base_stat || 0,
-      spd: pkm?.stats?.[5].base_stat || 0
-    }
-
-    // workaround to get id by url string, since /pokemon?limit=X endpoint provides only name and url
-    const urlPokemonPattern = 'https://pokeapi.co/api/v2/pokemon/'
-    if (!specie && pkm) {
-      this.id = Number(pkm.url?.slice(urlPokemonPattern.length, -1))
-    }
-  }
-
-  public debug() {
+  /**
+   * console.log(obj)
+   */
+  public debug = () => {
     console.log(this)
+  }
+
+  /**
+   * get an array of ArtistData (HTTP response from /?method=library.getartists),
+   * starting from artists.artist attribute, then returns an array of Artist
+   */
+  public static array = (array: ArtistData[]) => {
+    const artists = new Array<Artist>()
+    array.forEach(element => {
+      artists.push(new Artist(element))
+    })
+    return artists
+  }
+}
+
+/**
+ * usable object class definition for Last.FM API album endpoints, convert response
+ * to interface that get only useful attributes then format to be more legible
+ * and accessible
+ */
+export class Album {
+  public id: string
+  public name: string
+  public imgUrl: string
+  public artist: string
+  public tags?: string[]
+  public tracks?: {
+    name: string
+    duration: number
+    number?: number
+  }[]
+
+  constructor(album?: AlbumData, albumFromList?: AlbumDataFromList) {
+    //this.id = album?.mbid || albumFromList?.mbid || ''
+    this.id = album
+      ? this.getID(album?.artist || '', album.name || '')
+      : this.getID(albumFromList?.artist.name || '', albumFromList?.name || '') || ''
+    this.name = album?.name || albumFromList?.name || ''
+    this.imgUrl = album
+      ? this.getImageUrl(album?.image)
+      : this.getImageUrl(albumFromList?.image) || ''
+    this.artist = album?.artist || albumFromList?.artist.name || ''
+    this.tags = this.getTags(album?.tags)
+    this.tracks = this.getTracks(album?.tracks)
+  }
+
+  private getID = (artist?: string, album?: string) => {
+    const encodedArtist = encodeURIComponent(artist || '')
+    const encodedAlbum = encodeURIComponent(album || '')
+
+    return `${encodedArtist};${encodedAlbum}`
+  }
+
+  private getImageUrl = (image?: { size: string; '#text': string }[]) => {
+    return image?.[image.length - 1]?.['#text'] || ''
+  }
+
+  private getTags = (tags?: { tag: { name: string }[] }) => {
+    return tags?.tag?.map(tag => tag.name) || []
+  }
+
+  private getTracks = (tracks?: {
+    track: { name: string; duration: number; '@attr': { rank: number } }[]
+  }) => {
+    return (
+      tracks?.track?.map(({ name, duration, '@attr': { rank } = {} }) => ({
+        name,
+        duration,
+        number: rank
+      })) || []
+    )
+  }
+
+  /**
+   * console.log(obj)
+   */
+  public debug = () => {
+    console.log(this)
+  }
+
+  /**
+   * get an array of AlbumData (HTTP response from /?method=library.getartists),
+   * starting from artists.artist attribute, then returns an array of Artist
+   */
+  public static array = (array: AlbumData[]) => {
+    const albums = new Array<Album>()
+    array.forEach(element => {
+      albums.push(new Album(element))
+    })
+    return albums
   }
 }
