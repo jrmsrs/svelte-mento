@@ -6,7 +6,7 @@
   import axios, { type AxiosResponse } from 'axios'
   import { Album } from '$root/classes'
   import auth, { getUser } from 'sveltekit-auth0'
-  import { PUBLIC_APP_NAME } from '$env/static/public'
+  import { PUBLIC_APP_NAME, PUBLIC_LASTFM_API_URL } from '$env/static/public'
   import Link from '$components/Link.svelte'
   import Image from '$components/Image.svelte'
 
@@ -31,10 +31,8 @@
   export let user: any = {}
 
   onMount(async () => {
-    const url =
-      'http://ws.audioscrobbler.com/2.0/?user=juuniorlel&api_key=9d5f3b1566bea07f91216801dbae8108&format=json&'
-
     let promises = new Array<Promise<any>>()
+    let url = PUBLIC_LASTFM_API_URL
     for (let i = 0; i < pageNumbers; i++) {
       promises.push(
         axios.get(
