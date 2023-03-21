@@ -1,8 +1,9 @@
 <script lang="ts">
   import '$root/app.css'
   import Header from '$components/Header.svelte'
-  import darkIcon from '$images/buttons/dark.png'
-  import lightIcon from '$images/buttons/light.png'
+  import darkIcon from '$images/buttons/dark.webp'
+  import lightIcon from '$images/buttons/light.webp'
+
   import './styles.css'
   import { browser } from '$app/environment'
   import auth, { getUser } from 'sveltekit-auth0'
@@ -40,7 +41,12 @@
     }}
     class="bottom-0 right-0 fixed bg-gray-900 dark:bg-gray-100 m-4 md:m-8 w-12 z-10 h-12 md:w-16 md:h-16 opacity-25 transition-all hover:opacity-100 rounded-full overflow-hidden"
   >
-    <img src={dark ? lightIcon : darkIcon} alt="{dark ? 'light' : 'dark'} mode" />
+    <img
+      width="250"
+      height="250"
+      src={dark ? darkIcon : lightIcon}
+      alt="{dark ? 'light' : 'dark'} mode"
+    />
   </button>
 
   <div class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100  min-h-screen">

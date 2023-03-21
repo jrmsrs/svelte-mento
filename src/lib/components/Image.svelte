@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte'
   import { observe } from './intersection.service'
-  import missing from '$images/missing.png'
+  import missing from '$images/missing.webp'
   import lazy from '$images/colors.gif'
 
   let image, source
@@ -24,6 +24,9 @@
 
 <img
   src={source}
+  style={source == src ?? 'image-rendering:pixelated'}
+  width="300"
+  height="300"
   {alt}
   bind:this={image}
   {...$$restProps}

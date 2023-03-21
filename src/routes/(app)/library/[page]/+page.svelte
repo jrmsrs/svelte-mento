@@ -106,9 +106,4 @@
     --link-color: rgba(255, 62, 62, 0.5);
     --blur: 1.5px;
   }
-  .item a:hover {
-    filter: drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color))
-      drop-shadow(0 0 var(--blur) var(--link-color));
-  }
 </style>

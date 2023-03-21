@@ -30,7 +30,7 @@
 
   export let user: any = {}
 
-  onMount(async () => {
+  const fetchData = async () => {
     let promises = new Array<Promise<any>>()
     let url = PUBLIC_LASTFM_API_URL
     for (let i = 0; i < pageNumbers; i++) {
@@ -52,7 +52,10 @@
       })
       loaded = true
     })
+  }
 
+  onMount(async () => {
+    fetchData()
     user = JSON.parse(localStorage.getItem('auth0:user') || '{}')
   })
 </script>

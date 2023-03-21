@@ -30,7 +30,7 @@
       >
         {PUBLIC_APP_NAME}
       </Link>
-      <button on:click={toggleNavbar} class="flex md:hidden">
+      <button on:click={toggleNavbar} class="flex md:hidden" aria-label="menu">
         <span
           class="text-gray-900 dark:text-gray-100 hover:text-red-300 dark:hover:text-red-300 focus:outline-none focus:text-gray-400"
         >
@@ -92,6 +92,7 @@
       <div class="space-y-2">
         {#if !isAuthenticated}
           <button
+            aria-label="login"
             draggable="false"
             on:click={async () => {
               await auth.loginWithPopup({})
@@ -104,6 +105,7 @@
           </button>
         {:else}
           <button
+            aria-label="logout"
             draggable="false"
             on:click={async () => {
               registerLocal({ logout: true })
