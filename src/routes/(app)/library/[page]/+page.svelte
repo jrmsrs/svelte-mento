@@ -22,20 +22,27 @@
     const pageLimit = pageLim
     const url = PUBLIC_LASTFM_API_URL
 
-    await axios
-      .get(
-        `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${data.page}`
-      )
-      .then(async res => {
-        albums = new Array()
-        res.data.albums.album.forEach((res: any, i: number) => {
-          albums.push(new Album(undefined, res))
-        })
-        pageAmount = Math.ceil(resLimit / pageLimit)
-        img.forEach(e => e.reload())
+    const getLibAlbums = (res: any) => {
+      albums = new Array()
+      res.albums.album.forEach((res: any, i: number) => {
+        albums.push(new Album(undefined, res))
       })
-    loaded = true
-    return albums
+      pageAmount = Math.ceil(resLimit / pageLimit)
+      img.forEach(e => e.reload())
+      loaded = true
+      return albums
+    }
+
+    const fetchUrlWithCache = (url: string) => {
+      caches.match(url).then(async res => {
+        if (res) return res.json().then(res => getLibAlbums(res))
+        else return await axios.get(url).then(async res => getLibAlbums(res.data))
+      })
+    }
+
+    fetchUrlWithCache(
+      `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${data.page}`
+    )
   }
 
   onMount(async () => fetchData())
