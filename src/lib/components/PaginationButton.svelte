@@ -11,6 +11,7 @@
 
 {#if !active}
   <button
+    type="button"
     draggable="false"
     class={setup.pageBut}
     on:auxclick={() => gotoNewTab(href)}

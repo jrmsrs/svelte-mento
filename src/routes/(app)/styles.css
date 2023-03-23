@@ -9,10 +9,6 @@
 	--blur: 1.5px; */
 }
 
-/* .item a:hover{
-	filter: drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) drop-shadow(0 0 var(--blur) var(--link-color)) ;
-} */
-
 html {
   user-select: none;
 }
@@ -57,53 +53,4 @@ p:hover,
 li:hover {
   transition: opacity 0.3s;
   opacity: 1;
-}
-
-.type-water {
-  background-color: rgb(122, 191, 255);
-}
-.type-grass {
-  background-color: rgb(163 230 53);
-}
-.type-fire {
-  background-color: rgb(252 165 165);
-}
-.type-ground {
-  background-color: rgb(207, 188, 18);
-}
-.type-fighting {
-  background-color: rgb(251 146 60);
-}
-.type-bug {
-  background-color: rgb(141, 214, 72);
-}
-.type-poison {
-  background-color: rgb(173, 117, 245);
-}
-.type-dragon {
-  background-color: rgb(123, 123, 224);
-}
-.type-steel {
-  background-color: rgb(181, 181, 241);
-}
-.type-electric {
-  background-color: rgb(253, 255, 116);
-}
-.type-flying {
-  background-color: rgb(202, 175, 222);
-}
-.type-ghost {
-  background-color: rgb(145, 145, 218);
-}
-.type-psychic {
-  background-color: rgb(255, 143, 240);
-}
-.type-fairy {
-  background-color: rgb(255, 198, 255);
-}
-.type-rock {
-  background-color: rgb(136, 136, 136);
-}
-.type-ice {
-  background-color: rgb(172, 225, 250);
 }

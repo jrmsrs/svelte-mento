@@ -35,6 +35,7 @@
 
 <div class="app {dark ? 'dark' : ''} h-screen">
   <button
+    type="button"
     on:click={() => {
       dark = !dark
       localStorage.setItem('dark', dark.toString())
