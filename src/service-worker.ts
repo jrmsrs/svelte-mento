@@ -1,12 +1,12 @@
 /// <reference types="@sveltejs/kit" />
 import { build, files, version } from '$service-worker'
-import { imgCacheUrls } from './img-cacheurls.db'
+// import { imgCacheUrls } from './img-cacheurls.db'
 
 // Create a unique cache name for this deployment
 const CACHE = `cache-${version}`
 
 const ASSETS = [
-  ...imgCacheUrls,
+  // ...imgCacheUrls,
   ...build, // the app itself
   ...files // everything in `static`
 ]
