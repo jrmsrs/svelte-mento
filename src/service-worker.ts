@@ -8,7 +8,10 @@ const CACHE = `cache-${version}`
 const ASSETS = [
   // ...imgCacheUrls,
   ...build, // the app itself
-  ...files // everything in `static`
+  ...files, // everything in `static`
+  '/library/',
+  '/library/1/',
+  '/about/'
 ]
 
 self.addEventListener('install', event => {

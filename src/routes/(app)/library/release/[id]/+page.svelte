@@ -11,15 +11,21 @@
   export let data: RouteParams = { id: '' }
   let album: Album
 
-  export const fetchData = async (url = PUBLIC_LASTFM_API_URL) => {
-    return axios
-      .get(
-        `${url}method=album.getinfo&artist=${data.id.split(';')[0]}&album=${data.id.split(';')[1]}`
-      )
-      .then(async res => {
-        album = new Album(res.data.album)
-        return album
+  export const fetchData = async () => {
+    const url = PUBLIC_LASTFM_API_URL
+    const getAlbum = (res: any) => {
+      album = new Album(res.album)
+      return album
+    }
+    const fetchUrlWithCache = (url: string) => {
+      caches.match(url).then(async res => {
+        if (res) return res.json().then(res => getAlbum(res))
+        else return await axios.get(url).then(async res => getAlbum(res.data))
       })
+    }
+    fetchUrlWithCache(
+      `${url}method=album.getinfo&artist=${data.id.split(';')[0]}&album=${data.id.split(';')[1]}`
+    )
   }
 
   onMount(async () => fetchData())

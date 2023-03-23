@@ -31,52 +31,27 @@
   export let user: any = {}
 
   const fetchData = async () => {
-    //let promises = new Array<Promise<any>>()
-    let url = PUBLIC_LASTFM_API_URL
+    const url = PUBLIC_LASTFM_API_URL
+
+    const getRandAlbums = (res: any) => {
+      res.albums.album.forEach((album: any) => albumData.push(new Album(undefined, album)))
+      if (albumData.length === 1000) {
+        randAlbumIndexes.forEach(randValue => randAlbumData.push(albumData[randValue - 1]))
+        loaded = true
+      }
+    }
+
+    const fetchUrlWithCache = (url: string) => {
+      caches.match(url).then(async res => {
+        if (res) return res.json().then(res => getRandAlbums(res))
+        else return await axios.get(url).then(async res => getRandAlbums(res.data))
+      })
+    }
 
     for (let i = 0; i < pageNumbers; i++) {
-      caches
-        .match(
-          `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${i + 1}`
-        )
-        .then(async res => {
-          if (res) {
-            console.log('cache')
-            const resp = await res.json()
-            console.log(resp.albums)
-            resp.albums.album.forEach((album: any) => {
-              albumData.push(new Album(undefined, album))
-            })
-            if (albumData.length === 1000) {
-              console.log(albumData)
-              randAlbumIndexes.forEach(randValue => {
-                randAlbumData.push(albumData[randValue - 1])
-              })
-              loaded = true
-            }
-          } else {
-            console.log('api')
-            axios
-              .get(
-                `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${
-                  i + 1
-                }`
-              )
-              .then(res => {
-                console.log(res.data.albums)
-                res.data.albums.album.forEach((album: any) => {
-                  albumData.push(new Album(undefined, album))
-                })
-                if (albumData.length === 1000) {
-                  console.log(albumData)
-                  randAlbumIndexes.forEach(randValue => {
-                    randAlbumData.push(albumData[randValue - 1])
-                  })
-                  loaded = true
-                }
-              })
-          }
-        })
+      fetchUrlWithCache(
+        `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${i + 1}`
+      )
     }
   }
 
@@ -97,13 +72,7 @@
       <!-- {#if false} -->
       <p>welcome {user?.name ?? 'guest'} what do you think about listening to these albums?</p>
       {#if !user?.name}
-        <Link
-          on:click={async () => {
-            await auth.loginWithPopup({})
-          }}
-          href="/"
-          cls="text-xs"
-        >
+        <Link on:click={async () => await auth.loginWithPopup({})} href="/" cls="text-xs">
           login if you want to rate, favorite or review
         </Link>
       {/if}

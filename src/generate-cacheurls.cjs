@@ -1,6 +1,6 @@
 /**
- * just a snapshot of (available) imgUrls from '1001 albums you must hear before you die' top 1000 albums
- * since it is a very changeable data
+ * script that generate a snapshot of (available) imgUrls from '1001 albums you must hear before
+ * you die' top 1000 albums
  * */
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -33,10 +33,8 @@ Promise.all(promises).then(response => {
   fs.writeFile(filepath, content, err => {
     if (err) {
       const fs = require('fs')
-      fs.writeFile(filepath, 'export const imgCacheUrls = []', err => {
-        if (err) return
-      })
-      return console.log('connection failed generated default src/img-cacheurls.db.ts')
+      fs.writeFile(filepath, 'export const imgCacheUrls = []', err => err)
+      return console.log('connection failed - generated default src/img-cacheurls.db.ts')
     }
     console.log('src/img-cacheurls.db.ts successfully generated')
   })
