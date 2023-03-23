@@ -1,10 +1,12 @@
 /// <reference types="@sveltejs/kit" />
 import { build, files, version } from '$service-worker'
+import { imgCacheUrls } from './img-cacheurls.db'
 
 // Create a unique cache name for this deployment
 const CACHE = `cache-${version}`
 
 const ASSETS = [
+  ...imgCacheUrls,
   ...build, // the app itself
   ...files // everything in `static`
 ]
@@ -58,5 +60,5 @@ self.addEventListener('fetch', event => {
     }
   }
 
-  void event.respondWith(respond())
+  event.respondWith(respond())
 })

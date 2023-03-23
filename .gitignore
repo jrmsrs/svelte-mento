@@ -13,3 +13,4 @@ vite.config.ts.timestamp-*
 pnpm-lock.yaml
 yarn*
 .yarn/*
+src/*.db.ts

@@ -31,27 +31,53 @@
   export let user: any = {}
 
   const fetchData = async () => {
-    let promises = new Array<Promise<any>>()
+    //let promises = new Array<Promise<any>>()
     let url = PUBLIC_LASTFM_API_URL
+
     for (let i = 0; i < pageNumbers; i++) {
-      promises.push(
-        axios.get(
+      caches
+        .match(
           `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${i + 1}`
         )
-      )
-    }
-
-    Promise.all(promises).then(res => {
-      res.forEach(res => {
-        res.data.albums.album.forEach((album: any) => {
-          albumData.push(new Album(undefined, album))
+        .then(async res => {
+          if (res) {
+            console.log('cache')
+            const resp = await res.json()
+            console.log(resp.albums)
+            resp.albums.album.forEach((album: any) => {
+              albumData.push(new Album(undefined, album))
+            })
+            if (albumData.length === 1000) {
+              console.log(albumData)
+              randAlbumIndexes.forEach(randValue => {
+                randAlbumData.push(albumData[randValue - 1])
+              })
+              loaded = true
+            }
+          } else {
+            console.log('api')
+            axios
+              .get(
+                `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${
+                  i + 1
+                }`
+              )
+              .then(res => {
+                console.log(res.data.albums)
+                res.data.albums.album.forEach((album: any) => {
+                  albumData.push(new Album(undefined, album))
+                })
+                if (albumData.length === 1000) {
+                  console.log(albumData)
+                  randAlbumIndexes.forEach(randValue => {
+                    randAlbumData.push(albumData[randValue - 1])
+                  })
+                  loaded = true
+                }
+              })
+          }
         })
-      })
-      randAlbumIndexes.forEach(randValue => {
-        randAlbumData.push(albumData[randValue - 1])
-      })
-      loaded = true
-    })
+    }
   }
 
   onMount(async () => {
@@ -75,6 +101,7 @@
           on:click={async () => {
             await auth.loginWithPopup({})
           }}
+          href="/"
           cls="text-xs"
         >
           login if you want to rate, favorite or review
