@@ -23,7 +23,7 @@ for (let i = 0; i < 20; i++) {
 Promise.all(promises).then(response => {
   response.forEach(res => {
     res.data.albums.album.forEach(album => {
-      if (album.image[3]['#text'] !== '' && imgUrlCache.length < 5)
+      if (album.image[3]['#text'] !== '' && imgUrlCache.length < 500)
         imgUrlCache.push(album.image[3]['#text'])
     })
   })
