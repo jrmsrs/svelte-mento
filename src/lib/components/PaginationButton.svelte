@@ -4,25 +4,21 @@
   const gotoNewTab = (url: string) => window.open(url, '_blank')
 
   export let href = ''
-  export let fetchData: Function = () => {}
   export let setup: any
   export let active = false
 </script>
 
 {#if !active}
-  <button
-    type="button"
+  <!-- svelte-ignore a11y-missing-attribute -->
+  <a
     draggable="false"
     class={setup.pageBut}
+    {href}
     on:auxclick={() => gotoNewTab(href)}
-    on:click={async () => {
-      await goto(href)
-      fetchData()
-    }}
     {...$$restProps}
   >
     <slot />
-  </button>
+  </a>
 {:else}
   <div class={setup.pageActive}><slot /></div>
 {/if}

@@ -2,11 +2,9 @@
   import Skeleton from '$components/Skeleton.svelte'
   import '$root/app.css'
   import './styles.css'
-  import { onMount, onDestroy } from 'svelte'
-  import axios, { type AxiosResponse } from 'axios'
-  import { Album } from '$root/classes'
+  import { onMount } from 'svelte'
   import auth, { getUser } from 'sveltekit-auth0'
-  import { PUBLIC_APP_NAME, PUBLIC_LASTFM_API_URL } from '$env/static/public'
+  import { PUBLIC_APP_NAME } from '$env/static/public'
   import Link from '$components/Link.svelte'
   import Image from '$components/Image.svelte'
 
@@ -23,40 +21,11 @@
     (_, i: number) => (randAlbumIndexes[i] = getRandAlbumIndex(randAlbumIndexes))
   )
 
-  let albumData: Album[] = new Array()
-  let randAlbumData: Album[] = new Array()
-
-  export let loaded = false
-
   export let user: any = {}
-
-  const fetchData = async () => {
-    const url = PUBLIC_LASTFM_API_URL
-
-    const getRandAlbums = (res: any) => {
-      res.albums.album.forEach((album: any) => albumData.push(new Album(undefined, album)))
-      if (albumData.length === 1000) {
-        randAlbumIndexes.forEach(randValue => randAlbumData.push(albumData[randValue - 1]))
-        loaded = true
-      }
-    }
-
-    const fetchUrlWithCache = (url: string) => {
-      caches.match(url).then(async res => {
-        if (res) return res.json().then(res => getRandAlbums(res))
-        else return await axios.get(url).then(async res => getRandAlbums(res.data))
-      })
-    }
-
-    for (let i = 0; i < pageNumbers; i++) {
-      fetchUrlWithCache(
-        `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${i + 1}`
-      )
-    }
-  }
+  export let data: any
+  $: ({ randAlbumList } = data.streamed)
 
   onMount(async () => {
-    fetchData()
     user = JSON.parse(localStorage.getItem('auth0:user') || '{}')
   })
 </script>
@@ -68,8 +37,14 @@
 
 <section class="text-gray-900 dark:text-gray-100">
   <div class="mt-6">
-    {#if loaded}
-      <!-- {#if false} -->
+    {#await randAlbumList}
+      <p>loading</p>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 pb-8">
+        {#each { length: 6 } as _, i}
+          <Skeleton type={'photo/textbox'} />
+        {/each}
+      </div>
+    {:then randAlbumList}
       <p>welcome {user?.name ?? 'guest'} what do you think about listening to these albums?</p>
       {#if !user?.name}
         <Link on:click={async () => await auth.loginWithPopup({})} href="/" cls="text-xs">
@@ -77,7 +52,7 @@
         </Link>
       {/if}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-8">
-        {#each randAlbumData as album}
+        {#each randAlbumList as album}
           <div class="rounded overflow-hidden shadow-lg item p-2">
             <Link shadow nodefault href="/library/release/{album?.id}">
               <div class="p-4">
@@ -100,14 +75,9 @@
           ...or check the <Link href="/library">full library</Link>
         </p>
       </div>
-    {:else}
-      <p>loading</p>
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 pb-8">
-        {#each { length: 6 } as _, i}
-          <Skeleton type={'photo/textbox'} />
-        {/each}
-      </div>
-    {/if}
+    {:catch err}
+      <p>{err.message}</p>
+    {/await}
 
     <div class="hidden">
       <p>tasks:</p>

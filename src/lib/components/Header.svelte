@@ -73,7 +73,7 @@
         home
       </Link>
       <Link
-        href="/library"
+        href="/library/1"
         nodefault
         class="dark:text-gray-100 text-gray-900 dark:hover:text-red-300 hover:text-red-300 border-t-4 {$page.url.pathname.slice(
           0,

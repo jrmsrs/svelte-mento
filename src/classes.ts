@@ -123,7 +123,7 @@ export class Album {
   }
 
   private getTags = (tags?: { tag: { name: string }[] }) => {
-    return tags?.tag?.map(tag => tag.name) || []
+    return tags?.tag?.map?.(tag => tag.name) || []
   }
 
   private getTracks = (tracks?: {
@@ -144,7 +144,21 @@ export class Album {
   public debug = () => {
     console.log(this)
   }
-
+  /**
+   * convert this Album instance to an Plain Old Javascript Object, which allows
+   * to be serialized from server
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public toPOJO(): Record<string, any> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const plainObj: Record<string, any> = {}
+    for (const [key, value] of Object.entries(this)) {
+      if (typeof value !== 'function') {
+        plainObj[key] = value
+      }
+    }
+    return plainObj
+  }
   /**
    * get an array of AlbumData (HTTP response from /?method=library.getartists),
    * starting from artists.artist attribute, then returns an array of Artist

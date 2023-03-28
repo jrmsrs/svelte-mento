@@ -1,34 +1,10 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import axios from 'axios'
-  import { Album } from '$root/classes'
-  import type { RouteParams } from './$types'
-  import { PUBLIC_LASTFM_API_URL } from '$env/static/public'
   import Image from '$components/Image.svelte'
 
-  export let data: RouteParams = { id: '' }
-  let album: Album
-
-  export const fetchData = async () => {
-    const url = PUBLIC_LASTFM_API_URL
-    const getAlbum = (res: any) => {
-      album = new Album(res.album)
-      return album
-    }
-    const fetchUrlWithCache = (url: string) => {
-      caches.match(url).then(async res => {
-        if (res) return res.json().then(res => getAlbum(res))
-        else return await axios.get(url).then(async res => getAlbum(res.data))
-      })
-    }
-    fetchUrlWithCache(
-      `${url}method=album.getinfo&artist=${data.id.split(';')[0]}&album=${data.id.split(';')[1]}`
-    )
-  }
-
-  onMount(async () => fetchData())
+  export let data
+  $: ({ albumData } = data.streamed)
 
   const secToISO = (duration?: number) => {
     if ((duration || 0) >= 3600) return new Date((duration || 0) * 1000).toISOString().slice(12, 19) // H:MM:SS
@@ -40,13 +16,18 @@
 </script>
 
 <svelte:head>
-  <title>
-    library | {album?.name ? `${album.name}` : 'loading'}
-  </title>
+  {#await albumData}
+    <title>library | loading</title>
+  {:then album}
+    <title>library | {album?.name}</title>
+  {/await}
+
   <meta name="description" content="About app" />
 </svelte:head>
 
-{#if album}
+{#await albumData}
+  <p>loading...</p>
+{:then album}
   <div class="text-column text-gray-900 dark:text-gray-100 pb-8">
     <div class="grid grid-cols-6 gap-8">
       <div
@@ -128,9 +109,9 @@
       </ul>
     </div>
   </div>
-{:else}
-  <p>loading...</p>
-{/if}
+{:catch err}
+  <p>{err.message}</p>
+{/await}
 
 <style lang="postcss">
   :root {

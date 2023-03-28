@@ -4,48 +4,21 @@
   import Pagination from '$components/Pagination.svelte'
   import Skeleton from '$components/Skeleton.svelte'
   import { onMount } from 'svelte'
-  import axios from 'axios'
-  import { Album } from '$root/classes'
-  import type { RouteParams } from './$types'
-  import { PUBLIC_APP_NAME, PUBLIC_LASTFM_API_URL } from '$env/static/public'
+  import { PUBLIC_APP_NAME } from '$env/static/public'
   import Image from '$components/Image.svelte'
   import Link from '$components/Link.svelte'
 
-  export let data: RouteParams = { page: '1' }
-  export let albums = new Array<Album>()
+  export let data
+  $: ({ albumList } = data.streamed)
+
   let pageAmount: number
   let img = new Array<Image>()
-  let loaded = false
 
-  export const fetchData = async (max = 1000, pageLim = 50) => {
-    const resLimit = max
-    const pageLimit = pageLim
-    const url = PUBLIC_LASTFM_API_URL
-
-    const getLibAlbums = (res: any) => {
-      albums = new Array()
-      res.albums.album.forEach((res: any, i: number) => {
-        albums.push(new Album(undefined, res))
-      })
-      pageAmount = Math.ceil(resLimit / pageLimit)
-      img.forEach(e => e.reload())
-      loaded = true
-      return albums
-    }
-
-    const fetchUrlWithCache = (url: string) => {
-      caches.match(url).then(async res => {
-        if (res) return res.json().then(res => getLibAlbums(res))
-        else return await axios.get(url).then(async res => getLibAlbums(res.data))
-      })
-    }
-
-    fetchUrlWithCache(
-      `${url}method=tag.gettopalbums&tag=1001+albums+you+must+hear+before+you+die&page=${data.page}`
-    )
+  export const setPage = async (max = 1000, perPageLim = 50) => {
+    pageAmount = Math.ceil(max / perPageLim)
   }
 
-  onMount(async () => fetchData())
+  onMount(async () => setPage())
 
   export const setup = {
     pageBut:
@@ -61,10 +34,17 @@
 </svelte:head>
 
 <!-- {#if false} -->
-{#if loaded}
+{#await albumList}
+  <p>loading...</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-3">
+    {#each { length: 49 } as _}
+      <Skeleton type={'photo/title'} />
+    {/each}
+  </div>
+{:then albums}
   <div class="text-column text-gray-800 dark:text-gray-200">
     <h1>library</h1>
-    <Pagination {data} {setup} {pageAmount} {fetchData} className={''} />
+    <Pagination {data} {setup} {pageAmount} className={''} />
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-3">
       {#each albums as album, i}
         <div class="rounded-xl bg-gray-200 dark:bg-gray-800 p-3 item">
@@ -84,7 +64,7 @@
         </div>
       {/each}
     </div>
-    <Pagination {data} {setup} {pageAmount} {fetchData} className={'pb-8'} />
+    <Pagination {data} {setup} {pageAmount} className={'pb-8'} />
 
     <div class="hidden">
       <p>tasks:</p>
@@ -99,14 +79,9 @@
       </ul>
     </div>
   </div>
-{:else}
-  <p>loading...</p>
-  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-3">
-    {#each { length: 49 } as _}
-      <Skeleton type={'photo/title'} />
-    {/each}
-  </div>
-{/if}
+{:catch err}
+  <p>{err.message}</p>
+{/await}
 
 <style lang="postcss">
   :root {

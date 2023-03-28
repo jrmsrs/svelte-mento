@@ -1,45 +1,44 @@
 <script lang="ts">
   import Button from './PaginationButton.svelte'
-
   export let data: any
   export let setup: any
   export let pageAmount: any
-  export let fetchData: Function
   export let className: string
+  $: ({ page } = data)
 </script>
 
 <div class="flex m-2 {className}">
   <div class="pagination">
-    {#if data.page != 1}
-      <Button {setup} {fetchData} href="/library/1">
+    {#if page != 1}
+      <Button {setup} href="/library/1">
         {'|<'}
       </Button>
-      <Button {setup} {fetchData} href={`/library/${Number(data.page) - 1}`}>
+      <Button {setup} href={`/library/${Number(page) - 1}`}>
         {'<'}
       </Button>
     {/if}
-    {#if data.page >= 3 && pageAmount > 3}
+    {#if page >= 3 && pageAmount > 3}
       <div class={setup.ellip}>{'···'}</div>
     {/if}
     {#each { length: pageAmount } as _, i}
-      {#if i + 1 == Number(data.page) - 1 || i + 1 == Number(data.page) + 1 || (i + 1 == Number(data.page) + 2 && i + 1 == 3) || (i + 1 == Number(data.page) - 2 && Number(data.page) == pageAmount)}
-        <Button {setup} {fetchData} href={`/library/${i + 1}`}>
+      {#if i + 1 == Number(page) - 1 || i + 1 == Number(page) + 1 || (i + 1 == Number(page) + 2 && i + 1 == 3) || (i + 1 == Number(page) - 2 && Number(page) == pageAmount)}
+        <Button {setup} href={`/library/${i + 1}`}>
           {i + 1}
         </Button>
       {/if}
-      {#if i + 1 == Number(data.page)}
+      {#if i + 1 == Number(page)}
         <!-- active -->
         <Button active {setup}>{i + 1}</Button>
       {/if}
     {/each}
-    {#if pageAmount > 3 && data.page <= pageAmount - 2}
+    {#if pageAmount > 3 && page <= pageAmount - 2}
       <div class={setup.ellip}>{'···'}</div>
     {/if}
-    {#if data.page != pageAmount}
-      <Button {setup} {fetchData} href={`/library/${Number(data.page) + 1}`}>
+    {#if page != pageAmount}
+      <Button {setup} href={`/library/${Number(page) + 1}`}>
         {'>'}
       </Button>
-      <Button {setup} {fetchData} href={`/library/${pageAmount}`}>
+      <Button {setup} href={`/library/${pageAmount}`}>
         {'>|'}
       </Button>
     {/if}
