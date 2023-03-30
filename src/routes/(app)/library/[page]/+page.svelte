@@ -3,10 +3,10 @@
 <script lang="ts">
   import Pagination from '$components/Pagination.svelte'
   import Skeleton from '$components/Skeleton.svelte'
-  import { onMount } from 'svelte'
-  import { PUBLIC_APP_NAME } from '$env/static/public'
+  import { onDestroy, onMount } from 'svelte'
   import Image from '$components/Image.svelte'
   import Link from '$components/Link.svelte'
+  import { each } from 'svelte/internal'
 
   export let data
   $: ({ albumList } = data.streamed)
@@ -18,7 +18,9 @@
     pageAmount = Math.ceil(max / perPageLim)
   }
 
-  onMount(async () => setPage())
+  onMount(async () => {
+    setPage()
+  })
 
   export const setup = {
     pageBut:
@@ -30,7 +32,7 @@
 </script>
 
 <svelte:head>
-  <title>library | {PUBLIC_APP_NAME}</title>
+  <title>library | page {data.page}</title>
 </svelte:head>
 
 <!-- {#if false} -->
@@ -79,8 +81,6 @@
       </ul>
     </div>
   </div>
-{:catch err}
-  <p>{err.message}</p>
 {/await}
 
 <style lang="postcss">

@@ -1,3 +1,5 @@
+import { dev } from '$app/environment'
+
 /**
  * handles with Last.FM API /?method=user.topartists endpoint
  */
@@ -142,7 +144,7 @@ export class Album {
    * console.log(obj)
    */
   public debug = () => {
-    console.log(this)
+    if (dev) console.log(this)
   }
   /**
    * convert this Album instance to an Plain Old Javascript Object, which allows

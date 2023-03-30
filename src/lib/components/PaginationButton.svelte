@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { goto } from '$app/navigation'
-
   const gotoNewTab = (url: string) => window.open(url, '_blank')
 
   export let href = ''

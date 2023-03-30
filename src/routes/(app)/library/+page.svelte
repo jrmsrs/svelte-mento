@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { goto } from '$app/navigation'
-  import { onMount } from 'svelte'
-  onMount(() => goto('/library/1'))
+  // this page will never be reached
 </script>
 
 <svelte:head>
-  <title>library</title>
+  <title>redirecting</title>
 </svelte:head>
 
 <div class="text-column text-gray-900 dark:text-gray-100">

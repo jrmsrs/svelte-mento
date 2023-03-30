@@ -1,4 +1,11 @@
-import { LASTFM_API_URL, LASTFM_API_TAG } from '$env/static/private'
+import { dev } from '$app/environment'
+import {
+  LASTFM_API_URL,
+  LASTFM_API_TAG,
+  CACHE_VERSION,
+  HOME_CACHE_DURATION,
+  DEFAULT_CACHE_DURATION
+} from '$env/static/private'
 import { redis } from '$lib/server/redis'
 import { Album } from '$root/classes'
 import { error } from '@sveltejs/kit'
@@ -24,32 +31,51 @@ export const load = ({ fetch, setHeaders }) => {
       data.forEach((res: any) => {
         albumData.push(new Album(undefined, res).toPOJO())
       })
-      randAlbumIndexes.forEach(randValue => randAlbumData.push(albumData[randValue - 1]))
+      randAlbumIndexes.forEach(randValue => {
+        randAlbumData.push(albumData[randValue - 1])
+      })
       const destData = randAlbumData
-      redis.set(cachePath, JSON.stringify(destData), 'EX', 600)
+      redis.set(
+        cachePath + CACHE_VERSION,
+        JSON.stringify(destData),
+        'EX',
+        HOME_CACHE_DURATION || DEFAULT_CACHE_DURATION
+      )
       return destData
     }
     const fetchUrlWithCache = async (url: string) => {
-      const res = await fetch(url)
-      const cacheControl = res.headers.get('cache-control')
-      if (cacheControl) setHeaders({ 'cache-control': cacheControl })
-      // if (!res.ok) throw error(res.status, 'could not fetch albums')
-      const data = await res.json()
-      return data.albums.album
+      try {
+        const res = await fetch(url)
+        const cacheControl = res.headers.get('cache-control')
+        if (cacheControl) setHeaders({ 'cache-control': cacheControl })
+        // if (!res.ok) throw error(res.status, 'could not fetch albums')
+        const data = await res.json()
+        return data.albums.album
+      } catch (error) {
+        return { error: 'error ' + error }
+      }
     }
 
-    const cached = await redis.get(cachePath)
-    if (cached) {
-      console.log(`cachehit:  / - ${cached.slice(0, 75)}`)
-      return JSON.parse(cached)
+    try {
+      const cached = await redis.get(cachePath + CACHE_VERSION)
+      if (cached && dev) {
+        console.log(`cachehit:  /@${CACHE_VERSION} - ${cached.slice(0, 100)}`)
+        return JSON.parse(cached)
+      }
+    } catch (error) {
+      if (dev) console.log('error: ' + error)
+      return { error: error }
     }
+    if (dev) console.log(`cachemiss: /@${CACHE_VERSION}`)
     for (let i = 0; i < 20; i++) {
       albumData.push(...(await fetchUrlWithCache(`${cachePath}&page=${i + 1}`)))
     }
+
     return getRandAlbums(albumData)
   }
+  const randAlbumList = fetchData()
   return {
-    randAlbumList: fetchData(),
-    streamed: { randAlbumList: fetchData() }
+    randAlbumList: randAlbumList,
+    streamed: { randAlbumList: randAlbumList }
   }
 }

@@ -5,6 +5,7 @@
 
   export let data
   $: ({ albumData } = data.streamed)
+  $: ({ albumName, artistName } = data)
 
   const secToISO = (duration?: number) => {
     if ((duration || 0) >= 3600) return new Date((duration || 0) * 1000).toISOString().slice(12, 19) // H:MM:SS
@@ -16,11 +17,7 @@
 </script>
 
 <svelte:head>
-  {#await albumData}
-    <title>library | loading</title>
-  {:then album}
-    <title>library | {album?.name}</title>
-  {/await}
+  <title>library | {artistName} - {albumName}</title>
 
   <meta name="description" content="About app" />
 </svelte:head>

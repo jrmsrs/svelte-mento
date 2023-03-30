@@ -1,7 +1,7 @@
-import { LASTFM_API_URL } from '$env/static/private'
+import { dev } from '$app/environment'
+import { CACHE_VERSION, DEFAULT_CACHE_DURATION, LASTFM_API_URL } from '$env/static/private'
 import { redis } from '$lib/server/redis'
 import { Album } from '$root/classes'
-import { error } from '@sveltejs/kit'
 
 export const load = ({ params, fetch, setHeaders }) => {
   const artist = params.id.split(';')[0]
@@ -13,27 +13,41 @@ export const load = ({ params, fetch, setHeaders }) => {
     }
 
     const fetchUrlWithCache = async (url: string) => {
-      const cached = await redis.get(url)
-      if (cached) {
-        console.log('cachehit:  ' + cached.slice(0, 80))
-        return JSON.parse(cached)
+      try {
+        const cached = await redis.get(url + CACHE_VERSION)
+        if (cached && dev) {
+          console.log(
+            `cachehit:  ${params.id.slice(0, 20)}...@${CACHE_VERSION} - ${cached.slice(0, 76)}`
+          )
+          return JSON.parse(cached)
+        }
+      } catch (error) {
+        if (dev) console.log('error: ' + error)
+        return { error: error }
       }
-      console.log('cachemiss: ' + params.id)
-      const res = await fetch(url)
-      const cacheControl = res.headers.get('cache-control')
-      if (cacheControl) setHeaders({ 'cache-control': cacheControl })
-      // if (!res.ok) throw error(res.status, 'could not fetch album')
-      const data = await res.json()
-      const destData = getAlbum(data)
-      redis.set(url, JSON.stringify(destData), 'EX', 120)
-      return destData
+      try {
+        if (dev) console.log(`cachemiss: ${params.id.slice(0, 20)}...@${CACHE_VERSION}`)
+        const res = await fetch(url)
+        const cacheControl = res.headers.get('cache-control')
+        if (cacheControl) setHeaders({ 'cache-control': cacheControl })
+        // if (!res.ok) throw error(res.status, 'could not fetch album')
+        const data = await res.json()
+        const destData = getAlbum(data)
+        redis.set(url + CACHE_VERSION, JSON.stringify(destData), 'EX', DEFAULT_CACHE_DURATION)
+        return destData
+      } catch (error) {
+        return { error: 'error ' + error }
+      }
     }
     return fetchUrlWithCache(
       `${LASTFM_API_URL}method=album.getinfo&artist=${artist}&album=${album}`
-    ).catch(error => error)
+    )
   }
+  const albumData = fetchData()
   return {
-    albumData: fetchData(),
-    streamed: { albumData: fetchData() }
+    albumName: album.toLowerCase(),
+    artistName: artist.toLowerCase(),
+    albumData: albumData,
+    streamed: { albumData: albumData }
   }
 }
