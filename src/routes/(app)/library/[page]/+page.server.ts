@@ -18,8 +18,11 @@ export const load = ({ params, fetch, setHeaders }) => {
     const fetchUrlWithCache = async (url: string) => {
       const cached = await redis.get(url + CACHE_VERSION)
       try {
-        if (cached && dev) {
-          console.log(`cachehit:  library/${params.page}@${CACHE_VERSION} - ${cached.slice(0, 93)}`)
+        if (cached) {
+          if (dev)
+            console.log(
+              `cachehit:  library/${params.page}@${CACHE_VERSION} - ${cached.slice(0, 93)}`
+            )
           return JSON.parse(cached)
         }
       } catch (error) {

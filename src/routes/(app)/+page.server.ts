@@ -2,7 +2,6 @@ import { dev } from '$app/environment'
 import { LASTAPI_URL, LASTAPI_TAG, CACHE_VERSION, DEFAULT_TTL, HOME_TTL } from '$env/static/private'
 import { redis } from '$lib/server/redis'
 import { Album } from '$root/classes'
-import { error } from '@sveltejs/kit'
 
 export const load = ({ fetch, setHeaders }) => {
   const pageNumbers = 20 // 1000 releases
@@ -47,8 +46,8 @@ export const load = ({ fetch, setHeaders }) => {
 
     try {
       const cached = await redis.get(cachePath + CACHE_VERSION)
-      if (cached && dev) {
-        console.log(`cachehit:  /@${CACHE_VERSION} - ${cached.slice(0, 100)}`)
+      if (cached) {
+        if (dev) console.log(`cachehit:  /@${CACHE_VERSION} - ${cached.slice(0, 100)}`)
         return JSON.parse(cached)
       }
     } catch (error) {

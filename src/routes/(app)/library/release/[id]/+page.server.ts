@@ -15,10 +15,11 @@ export const load = ({ params, fetch, setHeaders }) => {
     const fetchUrlWithCache = async (url: string) => {
       try {
         const cached = await redis.get(url + CACHE_VERSION)
-        if (cached && dev) {
-          console.log(
-            `cachehit:  ${params.id.slice(0, 20)}...@${CACHE_VERSION} - ${cached.slice(0, 76)}`
-          )
+        if (cached) {
+          if (dev)
+            console.log(
+              `cachehit:  ${params.id.slice(0, 20)}...@${CACHE_VERSION} - ${cached.slice(0, 76)}`
+            )
           return JSON.parse(cached)
         }
       } catch (error) {
