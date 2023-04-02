@@ -1,10 +1,5 @@
 import { dev } from '$app/environment'
-import {
-  LASTFM_API_URL,
-  LASTFM_API_TAG,
-  CACHE_VERSION,
-  DEFAULT_CACHE_DURATION
-} from '$env/static/private'
+import { LASTAPI_URL, LASTAPI_TAG, CACHE_VERSION, DEFAULT_TTL } from '$env/static/private'
 import { redis } from '$lib/server/redis'
 import { Album } from '$root/classes'
 
@@ -38,14 +33,14 @@ export const load = ({ params, fetch, setHeaders }) => {
         // if (!res.ok) throw error(res.status, 'could not fetch albums')
         const data = await res.json()
         const destData = getLibAlbums(data)
-        redis.set(url + CACHE_VERSION, JSON.stringify(destData), 'EX', DEFAULT_CACHE_DURATION)
+        redis.set(url + CACHE_VERSION, JSON.stringify(destData), 'EX', DEFAULT_TTL)
         return destData
       } catch (error) {
         return { error: 'error ' + error }
       }
     }
     return fetchUrlWithCache(
-      `${LASTFM_API_URL}method=tag.gettopalbums&tag=${LASTFM_API_TAG}&page=${params.page}`
+      `${LASTAPI_URL}method=tag.gettopalbums&tag=${LASTAPI_TAG}&page=${params.page}`
     )
   }
   const albumList = fetchData()

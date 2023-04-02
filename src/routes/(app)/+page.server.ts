@@ -1,29 +1,23 @@
 import { dev } from '$app/environment'
-import {
-  LASTFM_API_URL,
-  LASTFM_API_TAG,
-  CACHE_VERSION,
-  HOME_CACHE_DURATION,
-  DEFAULT_CACHE_DURATION
-} from '$env/static/private'
+import { LASTAPI_URL, LASTAPI_TAG, CACHE_VERSION, DEFAULT_TTL, HOME_TTL } from '$env/static/private'
 import { redis } from '$lib/server/redis'
 import { Album } from '$root/classes'
 import { error } from '@sveltejs/kit'
 
-const pageNumbers = 20 // 1000 releases
-const randAlbumIndexes = [0, 0, 0, 0, 0, 0]
-const getRandAlbumIndex: (arr: Array<number>) => number = arr => {
-  const randNum = Math.ceil(Math.random() * (pageNumbers * 50))
-  const found = arr.find(e => e == randNum)
-  return found ? getRandAlbumIndex(arr) : randNum
-}
-randAlbumIndexes.forEach(
-  (_, i: number) => (randAlbumIndexes[i] = getRandAlbumIndex(randAlbumIndexes))
-)
 export const load = ({ fetch, setHeaders }) => {
-  const albumData: any[] = []
+  const pageNumbers = 20 // 1000 releases
+  const randAlbumIndexes = [0, 0, 0, 0, 0, 0]
+  const getRandAlbumIndex: (arr: Array<number>) => number = arr => {
+    const randNum = Math.ceil(Math.random() * (pageNumbers * 50))
+    const found = arr.find(e => e == randNum)
+    return found ? getRandAlbumIndex(arr) : randNum
+  }
+  randAlbumIndexes.forEach(
+    (_, i: number) => (randAlbumIndexes[i] = getRandAlbumIndex(randAlbumIndexes))
+  )
+  const albumData: object[] = []
   const randAlbumData: any[] = []
-  const cachePath = `${LASTFM_API_URL}method=tag.gettopalbums&tag=${LASTFM_API_TAG}`
+  const cachePath = `${LASTAPI_URL}method=tag.gettopalbums&tag=${LASTAPI_TAG}`
 
   const fetchData = async () => {
     const getRandAlbums = (data: any) => {
@@ -35,12 +29,7 @@ export const load = ({ fetch, setHeaders }) => {
         randAlbumData.push(albumData[randValue - 1])
       })
       const destData = randAlbumData
-      redis.set(
-        cachePath + CACHE_VERSION,
-        JSON.stringify(destData),
-        'EX',
-        HOME_CACHE_DURATION || DEFAULT_CACHE_DURATION
-      )
+      redis.set(cachePath + CACHE_VERSION, JSON.stringify(destData), 'EX', HOME_TTL || DEFAULT_TTL)
       return destData
     }
     const fetchUrlWithCache = async (url: string) => {
@@ -67,9 +56,15 @@ export const load = ({ fetch, setHeaders }) => {
       return { error: error }
     }
     if (dev) console.log(`cachemiss: /@${CACHE_VERSION}`)
+    const promises = new Array<Promise<any>>()
     for (let i = 0; i < 20; i++) {
-      albumData.push(...(await fetchUrlWithCache(`${cachePath}&page=${i + 1}`)))
+      promises.push(fetchUrlWithCache(`${cachePath}&page=${i + 1}`))
     }
+    await Promise.all(promises).then(res => {
+      res.forEach(albumPageRes => {
+        albumData.push(...albumPageRes)
+      })
+    })
 
     return getRandAlbums(albumData)
   }

@@ -1,5 +1,5 @@
 import { dev } from '$app/environment'
-import { CACHE_VERSION, DEFAULT_CACHE_DURATION, LASTFM_API_URL } from '$env/static/private'
+import { CACHE_VERSION, DEFAULT_TTL, LASTAPI_URL } from '$env/static/private'
 import { redis } from '$lib/server/redis'
 import { Album } from '$root/classes'
 
@@ -33,15 +33,13 @@ export const load = ({ params, fetch, setHeaders }) => {
         // if (!res.ok) throw error(res.status, 'could not fetch album')
         const data = await res.json()
         const destData = getAlbum(data)
-        redis.set(url + CACHE_VERSION, JSON.stringify(destData), 'EX', DEFAULT_CACHE_DURATION)
+        redis.set(url + CACHE_VERSION, JSON.stringify(destData), 'EX', DEFAULT_TTL)
         return destData
       } catch (error) {
         return { error: 'error ' + error }
       }
     }
-    return fetchUrlWithCache(
-      `${LASTFM_API_URL}method=album.getinfo&artist=${artist}&album=${album}`
-    )
+    return fetchUrlWithCache(`${LASTAPI_URL}method=album.getinfo&artist=${artist}&album=${album}`)
   }
   const albumData = fetchData()
   return {
