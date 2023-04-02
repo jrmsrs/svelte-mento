@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { loading$ } from '$root/stores'
+
   const gotoNewTab = (url: string) => window.open(url, '_blank')
 
   export let href = ''
@@ -13,6 +15,7 @@
     class={setup.pageBut}
     {href}
     on:auxclick={() => gotoNewTab(href)}
+    on:click={() => loading$.set(true)}
     {...$$restProps}
   >
     <slot />

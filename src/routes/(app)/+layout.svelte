@@ -8,24 +8,32 @@
   import { browser } from '$app/environment'
   import auth, { getUser } from 'sveltekit-auth0'
   import { onMount, onDestroy } from 'svelte'
+  import Skeleton from '$components/Skeleton.svelte'
+  import { loading$, storedDark } from '$root/stores'
 
   let subscription: any
+  let loadingSubscription: any
+  let loading: boolean
 
   const registerLocal = (options?: { logout: boolean }) => {
     const user$ = getUser()
     subscription = user$.subscribe(value => {
       localStorage.setItem('auth0:user', options?.logout ? '{}' : JSON.stringify(value || {}))
     })
+    loadingSubscription = loading$.subscribe(value => {
+      loading = value
+    })
   }
-
   onMount(() => {
     auth.initializeAuth0()
     registerLocal()
   })
-  onDestroy(() => subscription?.unsubscribe())
-
-  export let dark = true
-  if (browser) dark = localStorage.getItem('dark') == 'true' || false
+  onDestroy(() => {
+    subscription?.unsubscribe()
+    loadingSubscription?.unsubscribe()
+  })
+  let dark = storedDark !== 'false' || false
+  // if (browser) dark = localStorage.getItem('dark') == 'true' || false
 </script>
 
 <svelte:head>
@@ -33,7 +41,16 @@
   <!-- dark 111827 | light F3F4F6 -->
 </svelte:head>
 
-<div class="app {dark ? 'dark' : ''} h-screen">
+<div class="app {dark ? 'dark ' : ''}h-screen">
+  <div class={loading ? '' : 'hidden'}>
+    <div class="h-screen w-screen z-20 fixed grid content-center pointer-events-none">
+      <div
+        class="h-72 w-72 m-auto bg-opacity-50 bg-gray-100 overflow-hidden rounded-3xl backdrop-blur-md hover:transition"
+      >
+        <Skeleton type={'lazy-only'} />
+      </div>
+    </div>
+  </div>
   <button
     type="button"
     on:click={() => {

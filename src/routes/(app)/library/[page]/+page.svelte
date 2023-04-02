@@ -3,24 +3,16 @@
 <script lang="ts">
   import Pagination from '$components/Pagination.svelte'
   import Skeleton from '$components/Skeleton.svelte'
-  import { onDestroy, onMount } from 'svelte'
+  import { afterUpdate, onMount } from 'svelte'
   import Image from '$components/Image.svelte'
   import Link from '$components/Link.svelte'
-  import { each } from 'svelte/internal'
+  import { loading$ } from '$root/stores'
 
   export let data
-  $: ({ albumList } = data.streamed)
+  $: ({ albumList } = data.lazy)
 
   let pageAmount: number
   let img = new Array<Image>()
-
-  export const setPage = async (max = 1000, perPageLim = 50) => {
-    pageAmount = Math.ceil(max / perPageLim)
-  }
-
-  onMount(async () => {
-    setPage()
-  })
 
   export const setup = {
     pageBut:
@@ -29,6 +21,12 @@
       'but text-gray-200 dark:text-gray-800 dark:hover:text-gray-200 bg-gray-800 dark:bg-gray-200',
     ellip: 'ellip sm:py-1 sm:text-base text-gray-800 dark:text-gray-200'
   }
+  export const setPage = async (max = 1000, perPageLim = 50) => {
+    pageAmount = Math.ceil(max / perPageLim)
+  }
+
+  onMount(() => setPage())
+  afterUpdate(() => loading$.set(false))
 </script>
 
 <svelte:head>

@@ -2,6 +2,8 @@
 
 <script lang="ts">
   import Image from '$components/Image.svelte'
+  import { loading$ } from '$root/stores'
+  import { afterUpdate, onMount } from 'svelte'
 
   export let data
   $: ({ albumData } = data.streamed)
@@ -14,6 +16,9 @@
   function without(this: string, a: string) {
     return this != a
   }
+
+  onMount(() => loading$.set(false))
+  afterUpdate(() => loading$.set(false))
 </script>
 
 <svelte:head>

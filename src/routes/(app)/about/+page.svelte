@@ -1,6 +1,9 @@
 <script lang="ts">
   import Link from '$components/Link.svelte'
   import { PUBLIC_APP_NAME } from '$env/static/public'
+  import { loading$ } from '$root/stores'
+  import { onMount } from 'svelte'
+  onMount(() => loading$.set(false))
 </script>
 
 <svelte:head>

@@ -70,6 +70,26 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div>
+{:else if type == 'lazy-only'}
+  <div class="flex items-center justify-center mb-8 ">
+    <svg
+      class=" text-gray-500 dark:text-gray-600"
+      fill="currentColor"
+      viewBox="0 0 1024 1024"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d={svgPlaceholderPath} />
+      <rect
+        x="256"
+        y="256"
+        width="512"
+        height="512"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="24"
+      />
+    </svg>
+  </div>
 {/if}
 
 <style>

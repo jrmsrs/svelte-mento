@@ -2,11 +2,12 @@
   import Skeleton from '$components/Skeleton.svelte'
   import '$root/app.css'
   import './styles.css'
-  import { onMount } from 'svelte'
+  import { afterUpdate, onMount } from 'svelte'
   import auth, { getUser } from 'sveltekit-auth0'
   import { PUBLIC_APP_NAME } from '$env/static/public'
   import Link from '$components/Link.svelte'
   import Image from '$components/Image.svelte'
+  import { loading$ } from '$root/stores'
 
   let randAlbumIndexes = [0, 0, 0, 0, 0, 0]
   const pageNumbers = 20 // 1000 releases
@@ -25,9 +26,8 @@
   export let data: any
   $: ({ randAlbumList } = data.streamed)
 
-  onMount(async () => {
-    user = JSON.parse(localStorage.getItem('auth0:user') || '{}')
-  })
+  onMount(async () => (user = JSON.parse(localStorage.getItem('auth0:user') || '{}')))
+  afterUpdate(() => loading$.set(false))
 </script>
 
 <svelte:head>

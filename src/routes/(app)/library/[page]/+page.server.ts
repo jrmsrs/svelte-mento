@@ -50,6 +50,6 @@ export const load = ({ params, fetch, setHeaders }) => {
   return {
     page: params.page,
     albumList: albumList,
-    streamed: { albumList: albumList }
+    lazy: { albumList: albumList }
   }
 }
