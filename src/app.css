@@ -2,10 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 @layer base {
+  :root {
+    --color-dark: #111827;
+    --color-light: #F3F4F6;
+  }
   html {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
       'Courier New', monospace;
     text-transform: lowercase;
+    background: var(--color-light);
   }
   /* width */
   html ::-webkit-scrollbar {
@@ -14,13 +19,13 @@
 
   /* Track */
   html ::-webkit-scrollbar-track {
-    background: #111827;
+    background: var(--color-dark);
   }
 
   /* Handle */
   html ::-webkit-scrollbar-thumb {
-    background: #F3F4F6;
-    border:  solid #111827;
+    background: var(--color-light);
+    border:  solid var(--color-dark);;
     border-left: 10px;
     border-bottom: 10px;
     border-top: 10px;
