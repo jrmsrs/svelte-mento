@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores'
   import { loading$ } from '$root/stores'
 
   const gotoNewTab = (url: string) => window.open(url, '_blank')
@@ -8,6 +9,12 @@
   export let blank = false
   export let nodefault = false
   export let shadow = false
+
+  const triggerLoading = () => {
+    const pageIsFirstLibrary = $page.url.pathname === '/library/1' && href === '/library'
+    const pageIsNotHref = $page?.url.pathname !== href
+    if (!pageIsFirstLibrary && pageIsNotHref) loading$.set(true)
+  }
 </script>
 
 <!-- cls: component class attribute preppend, nodefault: if true will not consider default class attribute -->
@@ -21,7 +28,7 @@
   on:auxclick={() => gotoNewTab(href)}
   target={blank ? '_blank' : null}
   rel={blank ? 'noreferrer' : null}
-  on:click={() => loading$.set(true)}
+  on:click={() => triggerLoading()}
   {...$$restProps}
 >
   <slot />

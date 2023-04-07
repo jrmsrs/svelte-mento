@@ -78,17 +78,6 @@
     {:catch err}
       <p>{err.message}</p>
     {/await}
-
-    <div class="hidden">
-      <p>tasks:</p>
-
-      <ul>
-        <li>[x] basic integration with Last.FM API</li>
-        <li>[x] advanced integration with Last.FM API</li>
-        <li>[x] authentication / permissions</li>
-        <li>[ ] mongodb crud integration</li>
-      </ul>
-    </div>
   </div>
 </section>
 

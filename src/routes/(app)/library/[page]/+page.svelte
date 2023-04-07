@@ -65,19 +65,6 @@
       {/each}
     </div>
     <Pagination {data} {setup} {pageAmount} className={'pb-8'} />
-
-    <div class="hidden">
-      <p>tasks:</p>
-
-      <ul>
-        <li>[x] iterate and list the first 1000 - basic</li>
-        <li>[x] list with pagination, limit to 50 - basic/intermediate</li>
-        <li>[x] compact, 7 columns on lg or xl screen - stylization</li>
-        <li>[ ] allow search - advanced</li>
-        <li>[ ] filter by artist - advanced</li>
-        <li>[ ] filter by tag (+1001 albums you must hear before you die) - advanced</li>
-      </ul>
-    </div>
   </div>
 {/await}
 

@@ -100,16 +100,6 @@
         </div>
       </div>
     </div>
-    <div class="hidden">
-      <p>tasks:</p>
-
-      <ul>
-        <li class="txt">[x] basic infos</li>
-        <li class="txt">[x] tags and tracks - basic</li>
-        <li class="txt">[x] wiki - basic</li>
-        <li class="txt">[ ] similar albums - relationships between</li>
-      </ul>
-    </div>
   </div>
 {:catch err}
   <p>{err.message}</p>
