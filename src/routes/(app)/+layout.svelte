@@ -5,7 +5,6 @@
   import lightIcon from '$images/buttons/light.webp'
 
   import './styles.css'
-  import { browser } from '$app/environment'
   import auth, { getUser } from 'sveltekit-auth0'
   import { onMount, onDestroy } from 'svelte'
   import Skeleton from '$components/Skeleton.svelte'
@@ -33,15 +32,14 @@
     loadingSubscription?.unsubscribe()
   })
   let dark = storedDark !== 'false' || false
-  // if (browser) dark = localStorage.getItem('dark') == 'true' || false
 </script>
 
 <svelte:head>
-  <meta name="theme-color" content={dark ? '#111827' : 'F3F4F6'} />
+  <meta name="theme-color" content={dark ? '#111827' : '#F3F4F6'} />
   <!-- dark 111827 | light F3F4F6 -->
 </svelte:head>
 
-<div class="app {dark ? 'dark ' : ''}h-screen">
+<div class="app {dark ? 'dark ' : ''}h-screen scroll-smooth">
   <div class={loading ? '' : 'hidden'}>
     <div class="h-screen w-screen z-20 fixed grid content-center pointer-events-none">
       <div
@@ -51,6 +49,7 @@
       </div>
     </div>
   </div>
+  <div class="h-screen w-screen -z-30 fixed grid content-center pointer-events-none mobile-bg" />
   <button
     type="button"
     on:click={() => {
@@ -77,4 +76,8 @@
 </div>
 
 <style lang="postcss">
+  .mobile-bg {
+    background: linear-gradient(to top left, #111827, rgba(255, 153, 150, 0), white),
+      linear-gradient(to top right, #fca5a5, rgba(255, 153, 150, 0), #fca5a5) #111827;
+  }
 </style>
