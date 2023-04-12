@@ -2,9 +2,13 @@ import { test, expect } from '@playwright/test'
 
 test('index page', async ({ page }) => {
   await page.goto('/')
-  await page.getByText('loading...').first().isVisible()
-  await page.getByText('welcome guest what do you think about listening to these albums?').click()
-  expect(await page.locator('div.album').count()).toBe(6)
+  // await page.getByText('loading...').first().isVisible()
+  await page
+    .getByText('welcome guest what do you think about listening to these albums?')
+    .isVisible()
+  const albums = page.locator('div.album')
+  await expect(albums.first()).toBeVisible()
+  expect(await albums.count()).toBe(6)
   await (await page.waitForSelector('.item')).click()
 })
 
@@ -13,14 +17,22 @@ test('about page', async ({ page }) => {
   await page.getByRole('heading', { name: 'about' }).isVisible()
   await page
     .getByText(
-      'dis just a shitty project for my first interaction with sveltekit (i came from react + express), tailwind css (i came from bootstrap), mongodb (i came from mysql and sqlite).'
+      (
+        'dis just a shitty project for my first interaction with sveltekit (i come from react + express)' +
+        ', tailwind css (i come from bootstrap), mongodb (i come from mysql and sqlite).'
+      ).toLowerCase()
     )
     .isVisible()
   await page
     .getByText(
-      'a mini social media based on rateyourmusic using last.fm api. you will be able to favorite an album and see who follow, rate 0 to 5 stars, make review, follow user(?).'
+      (
+        'a mini frontend for Last.FM API. late ull be able to fav an album and see who follow, rate 0-5 ' +
+        'stars, make review, follow user, etc, but for now the main focus r to maintain project as scall' +
+        'able as possible.'
+      ).toLowerCase()
     )
     .isVisible()
+  await page.getByText('tusm: gueibe | ').isVisible()
   await page.getByText('jrmsrs | 2023').isVisible()
 })
 

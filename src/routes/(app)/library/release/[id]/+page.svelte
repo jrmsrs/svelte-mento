@@ -48,7 +48,7 @@
               <p class="album">{album.name}</p>
               <p class="artist">{album.artist}</p>
             </div>
-            <div class="px-6 pt-4 pb-2">
+            <div class="px-6 pt-4 pb-2 tags">
               {#if album.tags}
                 {#each album.tags.filter(without, '1001 albums you must hear before you die') as tag}
                   <span

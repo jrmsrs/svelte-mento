@@ -15,8 +15,7 @@ html {
 img:active {
   pointer-events: none;
 }
-button,
-a {
+button, a {
   cursor: default;
 }
 h1 {
@@ -24,33 +23,20 @@ h1 {
   font-size: 1.875rem;
   line-height: 2.25rem;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
+h1, h2, h3, h4, h5, h6, p {
   margin-bottom: 8px;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-li {
+h1, h2, h3, h4, h5, h6, p, li, tr {
   opacity: 0.75;
 }
-h1:hover,
-h2:hover,
-h3:hover,
-h4:hover,
-h5:hover,
-h6:hover,
-p:hover,
-li:hover {
+h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover, p:hover, li:hover, tr:hover {
+  transition: opacity 0.3s;
+  opacity: 1;
+}
+.tags span {
+  opacity: 0.75;
+}
+.tags span:hover {
   transition: opacity 0.3s;
   opacity: 1;
 }

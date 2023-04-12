@@ -7,6 +7,7 @@
 <button
   type="button"
   class="bottom-0 right-0 fixed bg-gray-900 dark:bg-gray-100 m-4 md:m-8 w-12 z-10 h-12 md:w-16 md:h-16 opacity-25 transition-all hover:opacity-100 rounded-full overflow-hidden"
+  aria-label="{dark ? 'light' : 'dark'} mode"
   on:click={() => setDarkMode()}
 >
   <img

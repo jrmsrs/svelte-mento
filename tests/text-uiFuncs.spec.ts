@@ -8,7 +8,7 @@ test('dark/light mode', async ({ page }) => {
   await page.goto('/')
   // await delay(5000)
   const dark = await page.evaluate(() => window.localStorage.getItem('dark'))
-  if (dark === 'true') {
+  if (!dark || dark === 'true') {
     await page.getByRole('button', { name: 'light mode' }).click()
     await page.getByRole('button', { name: 'dark mode' }).click()
   } else {
@@ -30,14 +30,11 @@ test('login/logout', async ({ page }) => {
   await page.goto('/')
   await delay(1000)
   await page
-    .getByText(
-      `welcome ${process.env.TESTING_EMAIL} what do you think about listening to these albums?`
-    )
+    .getByText(`welcome ${'test'} what do u think bout listening to these albums?`)
     .isVisible()
+  // assuming the owner of TESTING_EMAIL has nickname "test"
 
   await page.getByRole('button', { name: 'logout' }).click()
   await page.goto('/')
-  await page
-    .getByText('welcome guest what do you think about listening to these albums?')
-    .isVisible()
+  await page.getByText('welcome guest what do u think bout listening to these albums?').isVisible()
 })

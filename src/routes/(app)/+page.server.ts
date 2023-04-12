@@ -3,16 +3,20 @@ import { LASTAPI_URL, LASTAPI_TAG, CACHE_VERSION, DEFAULT_TTL, HOME_TTL } from '
 import { redis } from '$lib/server/redis'
 import { Album } from '$root/classes'
 
+export const _getRandAlbumIndex: (arr: Array<number>, pageNumbers: number) => number = (
+  arr,
+  pageNumbers
+) => {
+  const randNum = Math.ceil(Math.random() * (pageNumbers * 50))
+  const found = arr.find(e => e == randNum)
+  return found ? _getRandAlbumIndex(arr, pageNumbers) : randNum
+}
+
 export const load = ({ fetch, setHeaders }) => {
   const pageNumbers = 20 // 1000 releases
   const randAlbumIndexes = [0, 0, 0, 0, 0, 0]
-  const getRandAlbumIndex: (arr: Array<number>) => number = arr => {
-    const randNum = Math.ceil(Math.random() * (pageNumbers * 50))
-    const found = arr.find(e => e == randNum)
-    return found ? getRandAlbumIndex(arr) : randNum
-  }
   randAlbumIndexes.forEach(
-    (_, i: number) => (randAlbumIndexes[i] = getRandAlbumIndex(randAlbumIndexes))
+    (_, i: number) => (randAlbumIndexes[i] = _getRandAlbumIndex(randAlbumIndexes, pageNumbers))
   )
   const albumData: object[] = []
   const randAlbumData: any[] = []

@@ -2,32 +2,24 @@
   import Skeleton from '$components/Skeleton.svelte'
   import '$root/app.css'
   import './styles.css'
-  import { afterUpdate, onMount } from 'svelte'
-  import auth, { getUser } from 'sveltekit-auth0'
+  import { afterUpdate, onDestroy } from 'svelte'
   import { PUBLIC_APP_NAME } from '$env/static/public'
   import Link from '$components/Link.svelte'
   import Image from '$components/Image.svelte'
   import { loading$ } from '$root/stores'
+  import type { User } from '@auth0/auth0-spa-js'
+  import { getUser } from 'sveltekit-auth0'
 
-  let randAlbumIndexes = [0, 0, 0, 0, 0, 0]
   const pageNumbers = 20 // 1000 releases
-
-  export const getRandAlbumIndex: (arr: Array<number>) => number = arr => {
-    const randNum = Math.ceil(Math.random() * (pageNumbers * 50))
-    const found = arr.find(e => e == randNum)
-    return found ? getRandAlbumIndex(arr) : randNum
-  }
-
-  randAlbumIndexes.forEach(
-    (_, i: number) => (randAlbumIndexes[i] = getRandAlbumIndex(randAlbumIndexes))
-  )
-
-  export let user: any = {}
+  let user: User
+  const user$ = getUser()
+  const subscription = user$.subscribe(value => (user = value))
+  
   export let data: any
   $: ({ randAlbumList } = data.streamed)
 
-  onMount(async () => (user = JSON.parse(localStorage.getItem('auth0:user') || '{}')))
   afterUpdate(() => loading$.set(false))
+  onDestroy(subscription)
 </script>
 
 <svelte:head>
@@ -45,12 +37,9 @@
         {/each}
       </div>
     {:then randAlbumList}
-      <p>welcome {user?.name ?? 'guest'} what do you think about listening to these albums?</p>
-      {#if !user?.name}
-        <Link on:click={async () => await auth.loginWithPopup({})} href="/" cls="text-xs">
-          login if you want to rate, favorite or review
-        </Link>
-      {/if}
+      <p>
+        welcome {user?.nickname || user?.name || 'guest'} what do you think bout listening to these albums?
+      </p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-8">
         {#each randAlbumList as album}
           <div class="rounded overflow-hidden shadow-lg item p-2">
